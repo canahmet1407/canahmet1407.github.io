@@ -166,6 +166,16 @@
     transition: opacity 1.8s ease;
   }
   .hero-video.on { opacity: 1; }
+  /* Kapak karesi: video oynayamazsa (ör. telefonda) yavaşça yakınlaşan görüntü */
+  .hv-poster {
+    position: absolute; inset: -4%;
+    background: center 42% / cover no-repeat;
+    animation: kenburns 28s ease-in-out infinite alternate;
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.04) translate(0, 0); }
+    to   { transform: scale(1.2) translate(-3%, 2%); }
+  }
   .hero-video iframe {
     position: absolute; top: 50%; left: 50%;
     width: max(100cqw, 177.78cqh);
@@ -174,6 +184,13 @@
     border: 0;
     pointer-events: none;
   }
+  .hero-video video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hero-video iframe, .hero-video video { opacity: 0; transition: opacity 1.4s ease; }
+  .hero-video.playing iframe, .hero-video.playing video { opacity: 1; }
   .hero-video::after {
     content: "";
     position: absolute; inset: 0;
@@ -784,7 +801,7 @@
 
   <main>
     <div class="hero">
-      <div class="hero-video" id="heroVideo" aria-hidden="true"><div id="heroYT"></div></div>
+      <div class="hero-video" id="heroVideo" aria-hidden="true"><div class="hv-poster" id="heroPoster"></div><div id="heroYT"></div></div>
       <div class="tape rise" aria-hidden="true">
         <div class="tape-track" id="tapeTrack"></div>
         <span class="tape-read" id="hdg">HDG 000</span>
@@ -871,8 +888,10 @@ const SITE = {
   subName: "HÜRTÜRK İHA TAKIMI",
   tagline: "Tasarla · Üret · Uçur",
 
-  // Girişin arkasında sessiz oynayan uçuş videosu (YouTube video kimliği)
-  heroVideo: { id: "zkf9rLelHu8", title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
+  // Girişin arkasındaki uçuş videosu.
+  //  id:   YouTube video kimliği (kapak karesi + bilgisayarda YouTube oynatıcısı)
+  //  file: siteye yüklenen kısa, sessiz .mp4 (verilirse telefon dahil her yerde bu oynar)
+  heroVideo: { id: "zkf9rLelHu8", file: "", title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
 
   // Başvuru geri sayımı. Tarih Türkiye saatiyle (+03:00). "Cuma 24.00" = Cumartesi 00.00
   apply: {
@@ -1371,39 +1390,69 @@ function teamSheet(t, i) {
 $("fleet").addEventListener("click", (e) => { const b = e.target.closest(".ac"); if (b) openSheet(fleetSheet(SITE.fleet[+b.dataset.i])); });
 $("caps").addEventListener("click", (e) => { const b = e.target.closest(".cap"); if (b) openSheet(teamSheet(SITE.teams[+b.dataset.i], +b.dataset.i)); });
 
-/* ---------- Arka plan videosu ---------- */
+/* ---------- Arka plan videosu ----------
+   1) Kapak karesi her cihazda hemen görünür.
+   2) "file" (.mp4) verilmişse her cihazda o oynar (telefonda da kendiliğinden başlar).
+   3) Yoksa yalnız bilgisayarda YouTube oynatıcısı açılır; YouTube telefonda kendiliğinden oynatmıyor. */
 (function heroVideo() {
   const v = SITE.heroVideo;
-  const host = $("heroVideo"), tag = $("vidTag");
-  if (!v || !v.id) { host.remove(); tag.remove(); return; }
-  tag.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id);
+  const host = $("heroVideo"), tag = $("vidTag"), poster = $("heroPoster");
+  if (!v || (!v.id && !v.file)) { host.remove(); tag.remove(); return; }
+  tag.href = v.id ? "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id) : v.file;
   $("vidTagTxt").textContent = v.title || "";
+
+  const posterUrl = v.poster || (v.id ? `https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/maxresdefault.jpg` : "");
+  const reveal = () => { host.classList.add("on"); tag.classList.add("on"); };
+  const playing = () => { host.classList.add("on", "playing"); tag.classList.add("on"); };
+  if (posterUrl) {
+    const im = new Image();
+    im.onload = () => { poster.style.backgroundImage = `url("${posterUrl}")`; reveal(); };
+    im.src = posterUrl;
+  }
+
   const conn = navigator.connection;
-  if (reduceMotion || (conn && conn.saveData)) return;
-  let player = null, shown = false, t = 0;
-  function show() { if (shown) return; shown = true; host.classList.add("on"); tag.classList.add("on"); }
+  if (reduceMotion || (conn && conn.saveData)) return;     // yalnız kapak karesi
+
+  let ctl = null;                                           // { play, pause }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver((ents) => ents.forEach((en) => {
+      if (ctl) en.isIntersecting ? ctl.play() : ctl.pause();
+    }), { threshold: 0 }).observe(document.querySelector(".hero"));
+  }
+
+  if (v.file) {
+    const vid = document.createElement("video");
+    vid.muted = true; vid.defaultMuted = true; vid.loop = true; vid.autoplay = true;
+    vid.playsInline = true; vid.preload = "auto";
+    ["muted", "playsinline", "autoplay", "loop"].forEach((k) => vid.setAttribute(k, ""));
+    if (posterUrl) vid.poster = posterUrl;
+    vid.src = v.file;
+    vid.addEventListener("playing", playing);
+    host.appendChild(vid);
+    const tryPlay = () => vid.play().catch(() => {});
+    tryPlay();
+    ctl = { play: tryPlay, pause: () => vid.pause() };
+    return;
+  }
+
+  if (!v.id || matchMedia("(pointer: coarse)").matches) return;   // telefonda YouTube yükleme
+
+  let t = 0;
   window.onYouTubeIframeAPIReady = () => {
-    player = new YT.Player("heroYT", {
+    const player = new YT.Player("heroYT", {
       videoId: v.id,
       host: "https://www.youtube-nocookie.com",
       playerVars: { autoplay: 1, mute: 1, controls: 0, loop: 1, playlist: v.id, playsinline: 1, rel: 0,
                     modestbranding: 1, disablekb: 1, fs: 0, iv_load_policy: 3, start: v.start || 0 },
       events: {
-        onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+        onReady: (e) => { e.target.mute(); e.target.playVideo(); ctl = { play: () => e.target.playVideo(), pause: () => e.target.pauseVideo() }; },
         onStateChange: (e) => {
-          if (e.data === 1) { clearTimeout(t); t = setTimeout(show, 1600); }
+          if (e.data === 1) { clearTimeout(t); t = setTimeout(playing, 1600); }
           if (e.data === 0) { e.target.seekTo(v.start || 0); e.target.playVideo(); }
         },
       },
     });
   };
-  // Giriş ekrandan çıkınca videoyu durdur (pil ve veri tasarrufu)
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver((ents) => ents.forEach((en) => {
-      if (!player || !player.playVideo) return;
-      en.isIntersecting ? player.playVideo() : player.pauseVideo();
-    }), { threshold: 0 }).observe(document.querySelector(".hero"));
-  }
   const load = () => {
     const sc = document.createElement("script");
     sc.src = "https://www.youtube.com/iframe_api";
