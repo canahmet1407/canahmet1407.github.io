@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hürtürk İHA Takımı</title>
+<meta name="description" content="Hürtürk İHA Takımı — Instagram, LinkedIn, YouTube, başvuru formu, filomuz ve sponsorluk.">
+<meta name="theme-color" content="#080c16">
+
+<!-- Link önizlemesi (WhatsApp, Instagram, LinkedIn). Site adresi değişirse aşağıdaki 2 satırı güncelle. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hürtürk İHA Takımı">
+<meta property="og:description" content="Tasarla · Üret · Uçur — takımın tüm linkleri tek sayfada.">
+<meta property="og:url" content="https://canahmet1407.github.io/">
+<meta property="og:image" content="https://canahmet1407.github.io/og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon-48.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* Renkler takım logosundan: kırmızı #e3141f, siyah, beyaz; zemin postredeki gece laciverti */
+  :root {
+    --bg: #080c16;
+    --panel: rgba(17, 22, 34, 0.80);
+    --panel-solid: #111622;
+    --line: rgba(176, 192, 225, 0.12);
+    --line-strong: rgba(176, 192, 225, 0.26);
+    --ink: #eef1f6;
+    --ink-2: #a9b1c2;
+    --ink-3: #6c7488;
+    --accent: #ff3b47;
+    --accent-fill: #e3141f;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(255, 59, 71, 0.11);
+    --accent-glow: rgba(227, 20, 31, 0.40);
+    --ok: #34d399;
+    --grid: rgba(176, 192, 225, 0.04);
+    --sky: rgba(176, 192, 225, 0.05);
+    --ground: rgba(227, 20, 31, 0.17);
+    --shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.9);
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --display: "Chakra Petch", "Inter", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
+    --bg: #f2f3f6;
+    --panel: rgba(255, 255, 255, 0.85);
+    --panel-solid: #ffffff;
+    --line: rgba(15, 20, 40, 0.12);
+    --line-strong: rgba(15, 20, 40, 0.26);
+    --ink: #0c0f18;
+    --ink-2: #434a5c;
+    --ink-3: #737b8e;
+    --accent: #d0101b;
+    --accent-fill: #d0101b;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(208, 16, 27, 0.08);
+    --accent-glow: rgba(208, 16, 27, 0.28);
+    --ok: #0f9f5f;
+    --grid: rgba(15, 20, 40, 0.05);
+    --sky: rgba(15, 20, 40, 0.03);
+    --ground: rgba(208, 16, 27, 0.12);
+    --shadow: 0 10px 30px -20px rgba(15, 20, 40, 0.40);
+    color-scheme: light;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center top;
+    color: var(--ink);
+    font: 400 15px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 40% at 50% 0%, var(--accent-soft), transparent 70%),
+      radial-gradient(120% 80% at 50% 120%, var(--bg), transparent 60%);
+    z-index: 0;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; }
+  .mono { font-family: var(--mono); letter-spacing: 0.04em; }
+
+  .wrap {
+    position: relative; z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 16px calc(40px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- Üst HUD şeridi ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 0 -16px;
+    padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+    font: 600 11px/1 var(--mono);
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    background: linear-gradient(var(--bg) 55%, transparent);
+  }
+  .sig { display: inline-flex; align-items: center; gap: 8px; }
+  .sig i {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, .35);
+    animation: ping 2.4s ease-out infinite;
+  }
+  @keyframes ping {
+    0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, .35); }
+    70%, 100% { box-shadow: 0 0 0 8px transparent; }
+  }
+  .topbar-r { display: inline-flex; align-items: center; gap: 12px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; }
+  .badge { display: block; background: #fff; object-fit: contain; }
+  .brand .badge { width: 30px; height: 30px; padding: 2px; border-radius: 8px; box-shadow: 0 0 0 1px var(--line-strong); }
+  .icon-btn {
+    width: 32px; height: 32px;
+    display: inline-grid; place-items: center;
+    border: 1px solid var(--line); border-radius: 9px;
+    background: var(--panel);
+    cursor: pointer;
+    color: var(--ink-2);
+    transition: border-color .2s, color .2s;
+  }
+  .icon-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .icon-btn .sun { display: none; }
+  :root[data-theme="light"] .icon-btn .sun { display: block; }
+  :root[data-theme="light"] .icon-btn .moon { display: none; }
+
+  /* ---------- Hero ---------- */
+  .hero { text-align: center; padding: 8px 0 26px; }
+
+  .tape {
+    position: relative;
+    height: 34px;
+    margin: 4px 0 22px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  }
+  .tape-track { position: absolute; left: 50%; top: 0; height: 100%; will-change: transform; }
+  .tape-track svg { display: block; height: 100%; }
+  .tape-track line { stroke: var(--ink-3); stroke-width: 1; }
+  .tape-track line.maj { stroke: var(--ink-2); }
+  .tape-track text { fill: var(--ink-2); font: 600 9px var(--mono); letter-spacing: .06em; }
+  .tape-track text.card { fill: var(--accent); }
+  .tape-read {
+    position: absolute; left: 50%; top: 0;
+    transform: translateX(-50%);
+    padding: 3px 7px;
+    font: 600 10px/1 var(--mono);
+    letter-spacing: .1em;
+    color: var(--accent);
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+  }
+  .tape-caret {
+    position: absolute; left: 50%; bottom: 0;
+    width: 0; height: 0;
+    transform: translateX(-50%);
+    border: 5px solid transparent; border-bottom-color: var(--accent);
+  }
+
+  .adi {
+    position: relative;
+    width: 168px; height: 168px;
+    margin: 0 auto 18px;
+    filter: drop-shadow(0 0 22px var(--accent-soft));
+  }
+  .adi svg { width: 100%; height: 100%; overflow: visible; }
+  .adi .ring { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+  .adi .ring-in { fill: none; stroke: var(--accent); stroke-width: 1.6; }
+  .adi .tick { stroke: var(--ink-2); stroke-width: 1.4; }
+  .adi .tick.big { stroke: var(--accent); stroke-width: 2; }
+  .adi .sky { fill: var(--sky); }
+  .adi .ground { fill: var(--ground); }
+  .adi .hz { stroke: var(--accent); stroke-width: 1.6; }
+  .adi .pl { stroke: var(--ink-2); stroke-width: 1.2; }
+  .adi .pl-t { fill: var(--ink-3); font: 600 7px var(--mono); }
+  .adi .plane { fill: none; stroke: var(--ink); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+  .adi .ptr { fill: var(--accent); }
+  .adi .dot { fill: var(--accent); }
+
+  .stars { display: flex; justify-content: center; align-items: flex-end; gap: 7px; margin: 0 0 10px; color: var(--accent); }
+  .stars svg { width: 13px; height: 13px; filter: drop-shadow(0 0 6px var(--accent-glow)); }
+  .stars svg:nth-child(2) { width: 16px; height: 16px; transform: translateY(-4px); }
+  .callsign {
+    margin: 0 0 6px;
+    font: 600 11px/1 var(--mono);
+    letter-spacing: .28em;
+    color: var(--accent);
+  }
+  h1 {
+    margin: 0;
+    font: 700 clamp(40px, 12vw, 54px)/0.95 var(--display);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  h1 span { color: var(--accent); }
+  .tagline {
+    margin: 12px 0 0;
+    font: 500 14px/1.4 var(--display);
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 16px; }
+  .chip {
+    padding: 5px 9px;
+    font: 600 10px/1 var(--mono);
+    letter-spacing: .12em;
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+  }
+
+  /* ---------- HUD köşe braketleri ---------- */
+  .brk { position: relative; }
+  .brk::before {
+    content: "";
+    position: absolute; inset: -5px;
+    pointer-events: none;
+    --c: var(--line-strong); --l: 10px; --w: 1.5px;
+    background:
+      linear-gradient(var(--c), var(--c)) top left / var(--l) var(--w) no-repeat,
+      linear-gradient(var(--c), var(--c)) top left / var(--w) var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / var(--l) var(--w) no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / var(--w) var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--w) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / var(--w) var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--w) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / var(--w) var(--l) no-repeat;
+    opacity: 0;
+    transition: inset .22s ease, opacity .22s ease;
+  }
+  .brk:hover::before, .brk:focus-visible::before { opacity: 1; inset: -7px; --c: var(--accent); }
+
+  /* ---------- Linkler ---------- */
+  .links { display: grid; gap: 12px; }
+  .link {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 14px 13px 13px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+    transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+    outline: none;
+  }
+  .link:hover, .link:focus-visible { transform: translateY(-1px); border-color: var(--line-strong); }
+  .link:active { transform: translateY(0) scale(.99); }
+  .link .ico {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border-radius: 11px;
+    border: 1px solid var(--line);
+    background: var(--accent-soft);
+    color: var(--accent);
+    transition: background-color .18s, color .18s;
+  }
+  .link:hover .ico { background: var(--accent-fill); color: var(--accent-ink); }
+  .link .ico svg { width: 21px; height: 21px; }
+  .link .txt { min-width: 0; display: grid; gap: 1px; }
+  .link .t { font: 600 16px/1.25 var(--sans); }
+  .link .s {
+    font: 500 11.5px/1.3 var(--mono);
+    letter-spacing: .03em;
+    color: var(--ink-3);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .link .go { width: 18px; height: 18px; color: var(--ink-3); transition: transform .18s, color .18s; }
+  .link:hover .go { color: var(--accent); transform: translate(2px, -2px); }
+
+  .link.primary {
+    position: relative;
+    overflow: hidden;
+    padding: 17px 16px 17px 15px;
+    background: linear-gradient(135deg, var(--accent-fill), #b80d17);
+    border-color: transparent;
+    color: var(--accent-ink);
+    box-shadow: 0 16px 36px -16px var(--accent-glow), 0 0 0 1px rgba(255,255,255,.08) inset;
+  }
+  .link.primary .ico { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.24); color: var(--accent-ink); }
+  .link.primary .t { font: 700 18px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; }
+  .link.primary .s { color: currentColor; opacity: .72; white-space: normal; }
+  .link.primary .go { color: currentColor; }
+  .link.primary::after {
+    content: "";
+    position: absolute; top: 0; bottom: 0; left: -40%;
+    width: 30%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+    transform: skewX(-18deg);
+    animation: sweep 4.5s ease-in-out infinite 1.2s;
+    pointer-events: none;
+  }
+  @keyframes sweep { 0% { left: -40%; } 35%, 100% { left: 130%; } }
+
+  .link.off { opacity: .55; cursor: not-allowed; }
+  .link.off:hover { transform: none; border-color: var(--line); }
+  .link.off .ico { background: transparent; color: var(--ink-3); }
+  .link.primary.off { background: var(--panel); color: var(--ink); box-shadow: none; border-color: var(--line-strong); border-style: dashed; }
+  .link.primary.off::after { display: none; }
+  .soon {
+    font: 600 9.5px/1 var(--mono);
+    letter-spacing: .12em;
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px dashed var(--line-strong);
+    color: var(--ink-3);
+  }
+
+  /* ---------- Bölümler ---------- */
+  section { margin-top: 42px; }
+  .sec-h {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+    font: 600 11px/1 var(--mono);
+    letter-spacing: .16em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+  }
+  .sec-h .idx { color: var(--accent); }
+  .sec-h h2 {
+    margin: 0;
+    font: 700 13px/1 var(--display);
+    letter-spacing: .22em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .sec-h .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-strong), transparent); }
+
+  .panel {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+  }
+  .about { position: relative; overflow: hidden; padding: 22px 20px 20px; }
+  .about::after {
+    content: "";
+    position: absolute; right: -130px; top: -130px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background:
+      linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat,
+      linear-gradient(var(--line), var(--line)) center / 1px 100% no-repeat,
+      repeating-radial-gradient(circle at center, transparent 0 27px, var(--line-strong) 27px 28px);
+    -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+            mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+    opacity: .7;
+    pointer-events: none;
+  }
+  .kicker {
+    display: flex; align-items: center; gap: 8px;
+    margin: 0 0 12px;
+    font: 600 10.5px/1 var(--mono);
+    letter-spacing: .2em;
+    color: var(--accent);
+  }
+  .kicker::after { content: ""; width: 28px; height: 1px; background: var(--accent); opacity: .6; }
+  .lead {
+    position: relative; z-index: 1;
+    margin: 0;
+    padding-left: 14px;
+    border-left: 2px solid var(--accent);
+    font: 600 20px/1.42 var(--display);
+    letter-spacing: .005em;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .lead em { font-style: normal; color: var(--accent); }
+  .about .body {
+    position: relative; z-index: 1;
+    margin: 14px 0 0;
+    color: var(--ink-2);
+    font-size: 15px; line-height: 1.65;
+    text-wrap: pretty;
+  }
+  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+  .cap {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 18px 6px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--accent-soft), transparent 75%);
+    transition: border-color .2s, transform .2s;
+  }
+  .cap:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+  .cap .n { position: absolute; top: 7px; left: 9px; font: 600 9px/1 var(--mono); letter-spacing: .1em; color: var(--ink-3); }
+  .cap .ci {
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    color: var(--accent);
+    background: var(--panel-solid);
+    box-shadow: 0 0 18px -6px var(--accent-glow);
+  }
+  .cap .ci svg { width: 22px; height: 22px; }
+  .cap .cl {
+    font: 700 12.5px/1 var(--display);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* ---------- Filo ---------- */
+  .fleet { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ac {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel-solid);
+    box-shadow: var(--shadow);
+    transition: border-color .2s, transform .2s;
+  }
+  .ac:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+  .ac-img {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 13px 13px 0 0;
+    background: var(--accent-soft);
+  }
+  .ac-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+  .ac:hover .ac-img img { transform: scale(1.05); }
+  .ac-img svg { width: 100%; height: 100%; display: block; color: var(--accent); }
+  .ac-img svg .f { fill: var(--panel-solid); stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
+  .ac-img svg .p { stroke: var(--ink-2); stroke-width: 2; stroke-linecap: round; }
+  .ac-img svg .cl { stroke: currentColor; stroke-width: .6; stroke-dasharray: 3 2; opacity: .55; }
+  .ac-name {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    padding: 11px 8px 12px;
+    font: 700 15px/1.1 var(--display);
+    letter-spacing: .1em;
+    text-align: center;
+  }
+  .ac-name::after { content: ""; width: 24px; height: 2px; border-radius: 2px; background: var(--accent); }
+
+  /* ---------- Sponsorluk ---------- */
+  .sponsor h3 {
+    margin: 0 0 6px;
+    font: 700 21px/1.2 var(--display);
+    letter-spacing: .02em;
+  }
+  .sponsor p { margin: 0; color: var(--ink-2); }
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 11px;
+    border: 1px solid var(--line-strong);
+    font: 600 14px/1 var(--sans);
+    cursor: pointer;
+    background: transparent;
+    transition: background-color .18s, border-color .18s, transform .18s;
+  }
+  .btn svg { width: 17px; height: 17px; }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: scale(.98); }
+  .btn.solid { background: var(--accent-fill); color: var(--accent-ink); border-color: var(--accent-fill); }
+  .btn.off { opacity: .5; pointer-events: none; border-style: dashed; }
+  .btn.solid.off { background: transparent; color: var(--ink-2); border-color: var(--line-strong); }
+  .mail-line {
+    margin-top: 12px;
+    font: 500 12px/1.4 var(--mono);
+    color: var(--ink-3);
+    text-align: center;
+    word-break: break-all;
+  }
+
+  /* ---------- Alt bilgi ---------- */
+  footer {
+    margin-top: 44px;
+    text-align: center;
+    font: 600 10.5px/1.6 var(--mono);
+    letter-spacing: .14em;
+    color: var(--ink-3);
+  }
+  .foot-logo { width: 72px; height: 72px; margin: 0 auto 20px; padding: 4px; border-radius: 18px;
+    box-shadow: 0 0 0 1px var(--line-strong), 0 14px 34px -14px var(--accent-glow); }
+  .share { margin: 0 auto 18px; display: inline-flex; width: auto; padding: 0 18px; }
+  footer .tele { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 6px; opacity: .8; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 20px);
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--ink); color: var(--bg);
+    font: 600 13px/1 var(--sans);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* giriş animasyonu */
+  .rise { opacity: 0; transform: translateY(10px); animation: rise .6s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (min-width: 640px) {
+    .wrap { max-width: 600px; }
+    .ac-name { font-size: 17px; }
+    .caps { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .rise { opacity: 1; transform: none; }
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <span class="brand"><img class="badge" id="topLogo" alt="Hürtürk İHA logosu" width="30" height="30"><span class="sig"><i></i>SİNYAL · AKTİF</span></span>
+    <span class="topbar-r">
+      <span class="clock" id="clock">TSİ --:--:--</span>
+      <button class="icon-btn" id="themeBtn" aria-label="Açık / koyu tema">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </span>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div class="tape rise" aria-hidden="true">
+        <div class="tape-track" id="tapeTrack"></div>
+        <span class="tape-read" id="hdg">HDG 000</span>
+        <span class="tape-caret"></span>
+      </div>
+
+      <div class="adi rise" style="animation-delay:.05s" id="adi" aria-hidden="true"></div>
+
+      <div class="stars rise" style="animation-delay:.08s" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
+      </div>
+      <p class="callsign rise" style="animation-delay:.1s" id="callsign"></p>
+      <h1 class="rise" style="animation-delay:.14s" id="teamName"></h1>
+      <p class="tagline rise" style="animation-delay:.18s" id="tagline"></p>
+      <div class="chips rise" style="animation-delay:.22s" id="chips"></div>
+    </div>
+
+    <nav class="links" id="links" aria-label="Takım linkleri"></nav>
+
+    <section id="about" class="rise" style="animation-delay:.5s">
+      <div class="sec-h"><span class="idx">01</span><h2>Hakkımızda</h2><span class="rule"></span></div>
+      <div class="panel about">
+        <p class="kicker">BİZ KİMİZ</p>
+        <p class="lead" id="aboutLead"></p>
+        <p class="body" id="aboutText"></p>
+        <div class="caps" id="caps"></div>
+      </div>
+    </section>
+
+    <section id="filo">
+      <div class="sec-h"><span class="idx">02</span><h2>Filo</h2><span class="rule"></span><span id="fleetCount"></span></div>
+      <div class="fleet" id="fleet"></div>
+    </section>
+
+    <section id="sponsor">
+      <div class="sec-h"><span class="idx">03</span><h2>Sponsorluk &amp; İletişim</h2><span class="rule"></span></div>
+      <div class="panel sponsor">
+        <h3 id="sponsorTitle"></h3>
+        <p id="sponsorText"></p>
+        <div class="btns" id="sponsorBtns"></div>
+        <div class="mail-line" id="mailLine"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <img class="badge foot-logo" id="footLogo" alt="Hürtürk İHA logosu" width="72" height="72" loading="lazy">
+    <button class="btn share" id="shareBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg>
+      Bu sayfayı paylaş
+    </button>
+    <div id="copy"></div>
+    <div class="tele"><span id="teleAlt">ALT 120M</span><span id="teleSpd">GS 18M/S</span><span>LINK OK</span></div>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DÜZENLEME ALANI — linkleri ve yazıları sadece buradan değiştir.
+   Boş bırakılan link ("") sitede "YAKINDA" olarak görünür.
+   ============================================================ */
+const SITE = {
+  callsign: "CALLSIGN // HT",
+  name: "HÜRTÜRK <span>İHA</span>",
+  tagline: "Tasarla · Üret · Uçur",
+  chips: ["TEKNOFEST", "SABİT KANAT", "OTONOM UÇUŞ"],
+
+  // Takım logosu (üst şerit ve alt bilgide görünür)
+  logo: "logo.jpg",
+
+  links: [
+    { label: "Takıma Başvur", sub: "Başvuru formunu doldur, ekibe katıl", url: "https://docs.google.com/forms/d/e/1FAIpQLSe-slFZbT-IwBeIVvsvnrCKuLWE-mz9PZtMRb7K2oH-pxWIhA/viewform", icon: "form", primary: true },
+    { label: "Instagram",     sub: "@hurturkuav",                          url: "https://www.instagram.com/hurturkuav/", icon: "instagram" },
+    { label: "LinkedIn",      sub: "Hürtürk İHA",                          url: "https://www.linkedin.com/company/hurturkiha/", icon: "linkedin" },
+    { label: "YouTube",       sub: "@hurturkihatakimi",                    url: "https://www.youtube.com/@hurturkihatakimi", icon: "youtube" },
+  ],
+
+  // <em>...</em> arasındaki kısım kırmızı vurgulu görünür
+  aboutLead: "Hürtürk, kendilerini <em>ülkemizin geleceğe dair umudunun</em> bir parçası olarak gören gençlerden oluşan bir insansız hava aracı takımıdır.",
+  about: "Sabit kanatlı İHA'larımızı kendimiz tasarlıyor, üretiyor ve uçuruyoruz. Teknofest için otonom uçuş ve görüntü işleme üzerinde çalışıyor, fikirlerimizi simülasyondan sahaya taşıyoruz.",
+  // icon: "mekanik" | "yazilim" | "elektronik"
+  capabilities: [
+    { label: "Mekanik",    icon: "mekanik" },
+    { label: "Yazılım",    icon: "yazilim" },
+    { label: "Elektronik", icon: "elektronik" },
+  ],
+
+  // Yeni uçak eklemek için bir satır ekle: { name: "HT-...", photo: "filo-....jpg" }
+  // Fotoğraf dikey (4:5) olursa en iyi görünür.
+  fleet: [
+    { name: "HT-YAMALI",   photo: "filo-yamali.jpg" },
+    { name: "HT-ALAZ",     photo: "filo-alaz.jpg" },
+    { name: "HT-İSTİKBAL", photo: "filo-istikbal.jpg" },
+    { name: "HT-KÖREKE",   photo: "filo-koreke.jpg" },
+  ],
+
+  sponsor: {
+    title: "Gökyüzüne birlikte çıkalım",
+    text: "Malzeme, üretim ve yarışma süreçlerimizi destekçilerimizle büyütüyoruz. Sponsorluk ve iş birliği için bize yazın.",
+    email: "",          // ör. "hurturkuav@gmail.com"
+    deckUrl: "",        // isteğe bağlı: sponsorluk dosyası (PDF / Drive linki)
+  },
+
+  footer: "© 2026 HÜRTÜRK İHA TAKIMI",
+};
+/* ============================ DÜZENLEME ALANI SONU ============================ */
+
+const ICONS = {
+  form: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.48 2.48 0 1 1 0 4.96 2.48 2.48 0 0 1 0-4.96zM3 9.75h3.96V21H3zM9.5 9.75h3.8v1.54h.05c.53-1 1.82-2.05 3.75-2.05 4 0 4.74 2.64 4.74 6.07V21h-3.96v-5.07c0-1.21-.02-2.77-1.69-2.77-1.69 0-1.95 1.32-1.95 2.68V21H9.5z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3z"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+  handshake: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l2 2a1.4 1.4 0 0 0 2-2"/><path d="M14 14l2.5 2.5a1.4 1.4 0 0 0 2-2L15 11l-1 1a2 2 0 0 1-3-3l2.6-2.6a3 3 0 0 1 3.6-.4l.8.5H21v7h-2"/><path d="M3 6h3l4.5 4.5M3 13h2l5 5a1.4 1.4 0 0 0 2-2"/></svg>',
+  doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>',
+  mekanik: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  yazilim: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6M14 4l-4 16"/></svg>',
+  elektronik: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9.5 2v4M14.5 2v4M9.5 18v4M14.5 18v4M2 9.5h4M2 14.5h4M18 9.5h4M18 14.5h4"/></svg>',
+};
+
+/* Üstten görünüş şematik uçak çizimleri (burun yukarı) */
+const SHAPES = {
+  trainer: `
+    <line class="cl" x1="50" y1="4" x2="50" y2="94"/>
+    <path class="f" d="M34 78h32l-2 8H36z"/>
+    <path class="f" d="M50 10c3.2 0 4.6 4 4.6 9l-1.4 63h-6.4L45.4 19c0-5 1.4-9 4.6-9z"/>
+    <rect class="f" x="7" y="30" width="86" height="13" rx="3"/>
+    <line class="p" x1="40" y1="7.5" x2="60" y2="7.5"/>`,
+  twinboom: `
+    <line class="cl" x1="50" y1="6" x2="50" y2="94"/>
+    <rect class="f" x="34" y="40" width="4.5" height="46" rx="2"/>
+    <rect class="f" x="61.5" y="40" width="4.5" height="46" rx="2"/>
+    <rect class="f" x="30" y="80" width="40" height="7" rx="1.5"/>
+    <rect class="f" x="5" y="36" width="90" height="12" rx="3"/>
+    <path class="f" d="M50 13c4.6 0 6 5 6 11v27c0 4-2.6 7-6 7s-6-3-6-7V24c0-6 1.4-11 6-11z"/>
+    <line class="p" x1="42" y1="61" x2="58" y2="61"/>`,
+  twinmotor: `
+    <line class="cl" x1="50" y1="6" x2="50" y2="94"/>
+    <path class="f" d="M34 78h32l-2 8H36z"/>
+    <path class="f" d="M50 13c3.6 0 5 3 5 8l-1.6 61h-6.8L45 21c0-5 1.4-8 5-8z"/>
+    <rect class="f" x="6" y="32" width="88" height="13" rx="3"/>
+    <rect class="f" x="24.5" y="24" width="7.5" height="17" rx="3"/>
+    <rect class="f" x="68" y="24" width="7.5" height="17" rx="3"/>
+    <line class="p" x1="18.5" y1="22.5" x2="38" y2="22.5"/>
+    <line class="p" x1="62" y1="22.5" x2="81.5" y2="22.5"/>`,
+  tricycle: `
+    <line class="cl" x1="50" y1="4" x2="50" y2="94"/>
+    <path class="f" d="M35 80h30l-2 7H37z"/>
+    <path class="f" d="M50 10c3.4 0 5 4 5 10l-1.5 63h-7L45 20c0-6 1.6-10 5-10z"/>
+    <path class="f" d="M8 35h84l-3.5 11h-77z"/>
+    <circle class="g" cx="50" cy="19" r="2.6"/>
+    <circle class="g" cx="40" cy="51" r="2.6"/>
+    <circle class="g" cx="60" cy="51" r="2.6"/>
+    <line class="p" x1="41" y1="7.5" x2="59" y2="7.5"/>`,
+};
+
+const $ = (id) => document.getElementById(id);
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* ---------- Tema ---------- */
+(function theme() {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("ht-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  const sync = () => document.querySelector('meta[name="theme-color"]').setAttribute("content", root.dataset.theme === "light" ? "#f2f3f6" : "#080c16");
+  sync();
+  $("themeBtn").addEventListener("click", () => {
+    root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
+    try { localStorage.setItem("ht-theme", root.dataset.theme); } catch (e) {}
+    sync();
+  });
+})();
+
+/* ---------- Hero ---------- */
+$("callsign").textContent = SITE.callsign;
+$("teamName").innerHTML = SITE.name;
+$("tagline").textContent = SITE.tagline;
+$("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span>`).join("");
+
+/* Yapay ufuk göstergesi */
+(function adi() {
+  const host = $("adi");
+  let ticks = "";
+  [-60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60].forEach((a) => {
+    const big = a === 0 || Math.abs(a) === 30 || Math.abs(a) === 60;
+    const r1 = big ? 83 : 86, r2 = 93;
+    const rad = (a - 90) * Math.PI / 180;
+    ticks += `<line class="tick${big ? " big" : ""}" x1="${(r1 * Math.cos(rad)).toFixed(2)}" y1="${(r1 * Math.sin(rad)).toFixed(2)}" x2="${(r2 * Math.cos(rad)).toFixed(2)}" y2="${(r2 * Math.sin(rad)).toFixed(2)}"/>`;
+  });
+  let ladder = "";
+  [-20, -10, 10, 20].forEach((p) => {
+    const y = -p * 2.2, w = Math.abs(p) === 10 ? 18 : 28;
+    ladder += `<line class="pl" x1="${-w}" x2="${w}" y1="${y}" y2="${y}"/>`;
+    ladder += `<text class="pl-t" x="${w + 4}" y="${y + 2.5}">${Math.abs(p)}</text><text class="pl-t" x="${-w - 14}" y="${y + 2.5}">${Math.abs(p)}</text>`;
+  });
+  [-5, 5, -15, 15].forEach((p) => { const y = -p * 2.2; ladder += `<line class="pl" x1="-8" x2="8" y1="${y}" y2="${y}"/>`; });
+
+  const inner = `
+      <g clip-path="url(#adiClip)">
+        <g id="horizon">
+          <rect class="sky" x="-200" y="-200" width="400" height="200"/>
+          <rect class="ground" x="-200" y="0" width="400" height="200"/>
+          <line class="hz" x1="-200" x2="200" y1="0" y2="0"/>
+          ${ladder}
+        </g>
+      </g>
+      <path class="plane" d="M-48 0h26l7 9 7-9M48 0H22l-7 9-7-9"/>
+      <circle class="dot" r="3.2"/>`;
+  host.innerHTML = `
+    <svg viewBox="-100 -100 200 200">
+      <defs><clipPath id="adiClip"><circle r="76"/></clipPath></defs>
+      <circle class="ring" r="97"/>
+      ${ticks}
+      <g id="rollPtr"><path class="ptr" d="M0 -78l-5 -8h10z"/></g>
+      ${inner}
+      <circle class="ring-in" r="76"/>
+    </svg>`;
+})();
+
+/* Pusula bandı */
+(function tape() {
+  const PX = 1.6; // derece başına piksel
+  const W = 360 * PX;
+  const names = { 0: "K", 90: "D", 180: "G", 270: "B" }; // Kuzey, Doğu, Güney, Batı
+  let s = "";
+  for (let d = 0; d < 720; d += 5) {
+    const x = d * PX, deg = d % 360;
+    if (deg % 30 === 0) {
+      s += `<line class="maj" x1="${x}" x2="${x}" y1="20" y2="34"/>`;
+      const lab = names[deg] ?? String(deg).padStart(3, "0");
+      s += `<text class="${names[deg] ? "card" : ""}" x="${x}" y="15" text-anchor="middle">${lab}</text>`;
+    } else {
+      s += `<line x1="${x}" x2="${x}" y1="${deg % 10 === 0 ? 26 : 29}" y2="34"/>`;
+    }
+  }
+  const track = $("tapeTrack");
+  track.innerHTML = `<svg width="${W * 2}" viewBox="0 0 ${W * 2} 34">${s}</svg>`;
+
+  const horizon = document.getElementById("horizon");
+  const rollPtr = document.getElementById("rollPtr");
+  const hdgEl = $("hdg"), altEl = $("teleAlt"), spdEl = $("teleSpd");
+  const t0 = performance.now();
+
+  function frame(now) {
+    const t = (now - t0) / 1000;
+    const hdg = (274 + t * 4) % 360;
+    track.style.transform = `translateX(${-hdg * PX}px)`;
+    hdgEl.textContent = "HDG " + String(Math.round(hdg) % 360).padStart(3, "0");
+    const roll = 8 * Math.sin(t * 0.45);
+    const pitch = 4 * Math.sin(t * 0.31 + 1);
+    if (horizon) horizon.setAttribute("transform", `rotate(${roll.toFixed(2)}) translate(0 ${(pitch * 2.2).toFixed(2)})`);
+    if (rollPtr) rollPtr.setAttribute("transform", `rotate(${roll.toFixed(2)})`);
+    if (Math.floor(t * 4) % 4 === 0) {
+      altEl.textContent = "ALT " + Math.round(120 + 6 * Math.sin(t * 0.2)) + "M";
+      spdEl.textContent = "GS " + (18 + 1.5 * Math.sin(t * 0.33)).toFixed(1) + "M/S";
+    }
+    if (!reduceMotion) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* Saat (Türkiye saati) */
+(function clock() {
+  const el = $("clock");
+  const fmt = new Intl.DateTimeFormat("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  const tick = () => { el.textContent = "TSİ " + fmt.format(new Date()); };
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ---------- Linkler ---------- */
+$("links").innerHTML = SITE.links.map((l, i) => {
+  const has = !!l.url;
+  const cls = `link brk rise${l.primary ? " primary" : ""}${has ? "" : " off"}`;
+  const delay = `style="animation-delay:${0.28 + i * 0.06}s"`;
+  const end = has ? `<span class="go">${ICONS.arrow}</span>` : `<span class="soon">YAKINDA</span>`;
+  const body = `<span class="ico">${ICONS[l.icon] || ICONS.arrow}</span>
+      <span class="txt"><span class="t">${esc(l.label)}</span><span class="s">${esc(l.sub || "")}</span></span>${end}`;
+  return has
+    ? `<a class="${cls}" ${delay} href="${esc(l.url)}" target="_blank" rel="noopener">${body}</a>`
+    : `<div class="${cls}" ${delay} aria-disabled="true">${body}</div>`;
+}).join("");
+
+/* ---------- Hakkımızda ---------- */
+$("aboutLead").innerHTML = SITE.aboutLead;
+$("aboutText").innerHTML = SITE.about;
+$("caps").innerHTML = SITE.capabilities.map((c, i) => `
+  <div class="cap brk"><span class="n">${String(i + 1).padStart(2, "0")}</span>
+    <span class="ci">${ICONS[c.icon] || ""}</span><span class="cl">${esc(c.label)}</span></div>`).join("");
+
+/* ---------- Filo ---------- */
+$("fleetCount").textContent = String(SITE.fleet.length).padStart(2, "0") + " HAVA ARACI";
+$("fleet").innerHTML = SITE.fleet.map((a) => `
+  <article class="ac brk rise">
+    <div class="ac-img">${a.photo
+      ? `<img src="${esc(a.photo)}" alt="${esc(a.name)}" loading="lazy" width="420" height="525">`
+      : `<svg viewBox="0 0 100 100" role="img" aria-label="${esc(a.name)}">${SHAPES[a.shape] || SHAPES.trainer}</svg>`}</div>
+    <div class="ac-name">${esc(a.name)}</div>
+  </article>`).join("");
+
+/* ---------- Logo ---------- */
+["topLogo", "footLogo"].forEach((id) => { const el = $(id); if (SITE.logo) el.src = SITE.logo; else el.remove(); });
+
+/* ---------- Sponsorluk ---------- */
+(function sponsor() {
+  const sp = SITE.sponsor;
+  $("sponsorTitle").textContent = sp.title;
+  $("sponsorText").textContent = sp.text;
+  const mail = sp.email;
+  const subj = encodeURIComponent("Sponsorluk / İş Birliği — Hürtürk İHA");
+  let html = mail
+    ? `<a class="btn solid" href="mailto:${esc(mail)}?subject=${subj}">${ICONS.handshake}Sponsor Ol</a>
+       <a class="btn" href="mailto:${esc(mail)}">${ICONS.mail}E-posta</a>`
+    : `<span class="btn solid off">${ICONS.handshake}Sponsor Ol</span><span class="btn off">${ICONS.mail}E-posta</span>`;
+  if (sp.deckUrl) html += `<a class="btn" style="grid-column:1/-1" href="${esc(sp.deckUrl)}" target="_blank" rel="noopener">${ICONS.doc}Sponsorluk Dosyası</a>`;
+  $("sponsorBtns").innerHTML = html;
+  $("mailLine").textContent = mail ? mail : "E-POSTA ADRESİ EKLENECEK";
+})();
+
+/* ---------- Alt bilgi & paylaş ---------- */
+$("copy").textContent = SITE.footer;
+const toast = (msg) => { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 1800); };
+$("shareBtn").addEventListener("click", async () => {
+  const data = { title: document.title, text: "Hürtürk İHA Takımı", url: location.href };
+  try {
+    if (navigator.share) { await navigator.share(data); return; }
+    await navigator.clipboard.writeText(location.href);
+    toast("Link kopyalandı");
+  } catch (e) {
+    if (e && e.name === "AbortError") return;
+    toast(location.href);
+  }
+});
+
+/* Kaydırınca beliren bölümler */
+(function reveal() {
+  if (reduceMotion || !("IntersectionObserver" in window)) return;
+  document.querySelectorAll(".ac.rise").forEach((el) => { el.style.animationPlayState = "paused"; });
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.style.animationPlayState = "running"; io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".ac.rise").forEach((el, i) => { el.style.animationDelay = (i % 2) * 0.08 + "s"; io.observe(el); });
+})();
+</script>
+</body>
+</html>
