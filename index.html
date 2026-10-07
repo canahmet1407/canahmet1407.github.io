@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Hürtürk İHA Takımı</title>
-<meta name="description" content="Hürtürk İHA Takımı — Instagram, LinkedIn, YouTube, başvuru formu, filomuz ve sponsorluk.">
+<title>Kılavuz Hürtürk İHA Takımı</title>
+<meta name="description" content="Kılavuz Hürtürk İHA Takımı — başvuru formu, Instagram, LinkedIn, YouTube, filomuz ve sponsorluk.">
 <meta name="theme-color" content="#080c16">
 
 <!-- Link önizlemesi (WhatsApp, Instagram, LinkedIn). Site adresi değişirse aşağıdaki 2 satırı güncelle. -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hürtürk İHA Takımı">
+<meta property="og:title" content="Kılavuz Hürtürk İHA Takımı">
 <meta property="og:description" content="Tasarla · Üret · Uçur — takımın tüm linkleri tek sayfada.">
 <meta property="og:url" content="https://canahmet1407.github.io/">
 <meta property="og:image" content="https://canahmet1407.github.io/og.png">
@@ -25,6 +25,7 @@
   /* Renkler takım logosundan: kırmızı #e3141f, siyah, beyaz; zemin postredeki gece laciverti */
   :root {
     --bg: #080c16;
+    --bg-rgb: 8, 12, 22;
     --panel: rgba(17, 22, 34, 0.80);
     --panel-solid: #111622;
     --line: rgba(176, 192, 225, 0.12);
@@ -49,6 +50,7 @@
   }
   :root[data-theme="light"] {
     --bg: #f2f3f6;
+    --bg-rgb: 242, 243, 246;
     --panel: rgba(255, 255, 255, 0.85);
     --panel-solid: #ffffff;
     --line: rgba(15, 20, 40, 0.12);
@@ -148,7 +150,86 @@
   :root[data-theme="light"] .icon-btn .moon { display: none; }
 
   /* ---------- Hero ---------- */
-  .hero { text-align: center; padding: 8px 0 26px; }
+  .hero { position: relative; text-align: center; padding: 8px 0 30px; }
+  .hero > *:not(.hero-video) { position: relative; z-index: 1; }
+
+  /* Arka planda sessiz uçuş videosu */
+  .hero-video {
+    position: absolute; z-index: 0;
+    top: -90px; bottom: -24px;
+    left: 50%; width: 100vw;
+    transform: translateX(-50%);
+    overflow: hidden;
+    pointer-events: none;
+    container-type: size;
+    opacity: 0;
+    transition: opacity 1.8s ease;
+  }
+  .hero-video.on { opacity: 1; }
+  .hero-video iframe {
+    position: absolute; top: 50%; left: 50%;
+    width: max(100cqw, 177.78cqh);
+    height: max(100cqh, 56.25cqw);
+    transform: translate(-50%, -50%) scale(1.32);
+    border: 0;
+    pointer-events: none;
+  }
+  .hero-video::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, .16) 0 1px, transparent 1px 3px),
+      radial-gradient(110% 80% at 50% 42%, rgba(var(--bg-rgb), .42), rgba(var(--bg-rgb), .86) 72%),
+      linear-gradient(180deg, rgba(var(--bg-rgb), .55), rgba(var(--bg-rgb), .15) 30%, rgba(var(--bg-rgb), .35) 70%, rgba(var(--bg-rgb), 1));
+  }
+  .vid-tag {
+    position: absolute !important; right: 0; bottom: 4px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font: 600 9.5px/1 var(--mono);
+    letter-spacing: .14em;
+    color: var(--ink-3);
+    opacity: 0; visibility: hidden;
+    transition: opacity 1s ease 1s, color .2s;
+  }
+  .vid-tag.on { opacity: 1; visibility: visible; }
+  .vid-tag:hover { color: var(--ink); }
+  .vid-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1.2s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: .2; } }
+
+  /* Başvuru geri sayımı */
+  .countdown {
+    margin: 0 0 12px;
+    padding: 12px 14px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+  }
+  .countdown[hidden] { display: none; }
+  .cd-top {
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+    font: 600 10px/1.3 var(--mono);
+    letter-spacing: .14em;
+    color: var(--ink-3);
+  }
+  .cd-top b { display: inline-flex; align-items: center; gap: 7px; color: var(--accent); font-weight: 600; }
+  .cd-top b::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1s steps(2) infinite; }
+  .cd-digits {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: start;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .cd-digits b { display: block; font: 600 30px/1 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+  .cd-digits span { display: block; margin-top: 6px; font: 600 9px/1 var(--mono); letter-spacing: .18em; color: var(--ink-3); }
+  .cd-digits i { font: 600 22px/1.2 var(--mono); font-style: normal; color: var(--line-strong); }
+  .countdown.urgent .cd-digits b { color: var(--accent); }
+  .countdown.closed { text-align: center; }
+  .countdown.closed .cd-top { justify-content: center; }
+  .countdown.closed .cd-top b::before { animation: none; background: var(--ink-3); }
+  .countdown.closed .cd-top b { color: var(--ink-2); }
 
   .tape {
     position: relative;
@@ -227,21 +308,21 @@
   .stars { display: flex; justify-content: center; align-items: flex-end; gap: 7px; margin: 0 0 10px; color: var(--accent); }
   .stars svg { width: 13px; height: 13px; filter: drop-shadow(0 0 6px var(--accent-glow)); }
   .stars svg:nth-child(2) { width: 16px; height: 16px; transform: translateY(-4px); }
-  .callsign {
-    margin: 0 0 6px;
-    font: 600 11px/1 var(--mono);
-    letter-spacing: .28em;
-    color: var(--accent);
-  }
   h1 {
     margin: 0;
-    font: 700 clamp(40px, 12vw, 54px)/0.95 var(--display);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    font: 700 clamp(50px, 16vw, 70px)/0.92 var(--display);
+    letter-spacing: 0.04em;
+    text-shadow: 0 6px 30px rgba(var(--bg-rgb), .6);
+  }
+  .subname {
+    margin: 10px 0 0;
+    font: 700 14px/1.2 var(--display);
+    letter-spacing: .3em;
+    color: var(--accent);
   }
   h1 span { color: var(--accent); }
   .tagline {
-    margin: 12px 0 0;
+    margin: 14px 0 0;
     font: 500 14px/1.4 var(--display);
     letter-spacing: .32em;
     text-transform: uppercase;
@@ -428,7 +509,7 @@
     font-size: 15px; line-height: 1.65;
     text-wrap: pretty;
   }
-  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+  .caps { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
   .cap {
     display: flex; flex-direction: column; align-items: center; gap: 10px;
     padding: 18px 6px 14px;
@@ -437,7 +518,10 @@
     background: linear-gradient(180deg, var(--accent-soft), transparent 75%);
     transition: border-color .2s, transform .2s;
   }
+  button.cap { width: 100%; font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .cap:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+  .cap .plus { position: absolute; top: 7px; right: 8px; width: 15px; height: 15px; color: var(--ink-3); transition: color .2s, transform .2s; }
+  .cap:hover .plus { color: var(--accent); transform: rotate(90deg); }
   .cap .n { position: absolute; top: 7px; left: 9px; font: 600 9px/1 var(--mono); letter-spacing: .1em; color: var(--ink-3); }
   .cap .ci {
     width: 46px; height: 46px;
@@ -450,8 +534,8 @@
   }
   .cap .ci svg { width: 22px; height: 22px; }
   .cap .cl {
-    font: 700 12.5px/1 var(--display);
-    letter-spacing: .14em;
+    font: 700 12px/1.25 var(--display);
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: var(--ink);
   }
@@ -486,6 +570,128 @@
     text-align: center;
   }
   .ac-name::after { content: ""; width: 24px; height: 2px; border-radius: 2px; background: var(--accent); }
+  button.ac { display: block; width: 100%; padding: 0; font: inherit; color: inherit; text-align: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .ac-more {
+    position: absolute; top: 9px; right: 9px; z-index: 1;
+    width: 30px; height: 30px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(8, 12, 22, .5);
+    border: 1px solid rgba(255, 255, 255, .28);
+    -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+    transition: background-color .2s, transform .2s;
+  }
+  .ac-more svg { width: 15px; height: 15px; }
+  .ac:hover .ac-more { background: var(--accent-fill); transform: rotate(90deg); }
+
+  /* ---------- Alt panel (uçak & ekip detayları) ---------- */
+  dialog.sheet {
+    width: min(100%, 560px); max-width: 100%;
+    max-height: 92vh;
+    margin: auto auto 0;
+    padding: 0; border: 0;
+    background: transparent;
+    color: var(--ink);
+    overflow: visible;
+  }
+  dialog.sheet::backdrop { background: rgba(3, 5, 10, .62); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .sheet-in {
+    position: relative;
+    max-height: 92vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--panel-solid);
+    border: 1px solid var(--line-strong);
+    border-bottom: 0;
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -24px 60px -24px rgba(0, 0, 0, .75);
+    animation: sheetUp .32s cubic-bezier(.2, .8, .2, 1);
+  }
+  @keyframes sheetUp { from { transform: translateY(48px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .sheet-grab { position: absolute; top: 8px; left: 50%; z-index: 2; width: 40px; height: 4px; margin-left: -20px; border-radius: 4px; background: rgba(255, 255, 255, .45); }
+  .sheet-x {
+    position: absolute; top: 12px; right: 12px; z-index: 3;
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: rgba(var(--bg-rgb), .7);
+    -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .sheet-x svg { width: 16px; height: 16px; }
+  .sh-body { padding: 18px 18px calc(24px + env(safe-area-inset-bottom)); }
+  .sh-body.pad-top { padding-top: 34px; }
+  .sh-photo { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 21px 21px 0 0; background: var(--accent-soft); }
+  .sh-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 64%; display: block; }
+  .sh-photo::after { content: ""; position: absolute; inset: auto 0 0; height: 40%; background: linear-gradient(transparent, var(--panel-solid)); }
+  .sh-kicker { margin: 0 0 6px; font: 600 10px/1 var(--mono); letter-spacing: .2em; color: var(--accent); }
+  .sh-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; }
+  .sh-title h3 { margin: 0; font: 700 26px/1.1 var(--display); letter-spacing: .06em; }
+  .tag {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--line-strong);
+    font: 600 10px/1 var(--mono);
+    letter-spacing: .12em;
+    color: var(--ink-2);
+  }
+  .tag.red { border-color: var(--accent); color: var(--accent); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0 14px; }
+  .stat {
+    padding: 13px 6px 11px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-align: center;
+    background: linear-gradient(180deg, var(--accent-soft), transparent 80%);
+  }
+  .stat b { display: block; font: 700 24px/1 var(--display); }
+  .stat b small { margin-left: 3px; font-size: 12px; color: var(--ink-2); }
+  .stat span { display: block; margin-top: 7px; font: 600 8.5px/1.2 var(--mono); letter-spacing: .14em; color: var(--ink-3); }
+  .specs { margin: 0; }
+  .specs div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 11px 2px; border-bottom: 1px dashed var(--line); }
+  .specs div:last-child { border-bottom: 0; }
+  .specs dt { font: 600 10.5px/1.3 var(--mono); letter-spacing: .12em; color: var(--ink-3); text-transform: uppercase; }
+  .specs dd { margin: 0; font-weight: 600; text-align: right; }
+  .soon-box {
+    margin-top: 16px;
+    padding: 22px 16px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 14px;
+    text-align: center;
+    font: 600 11px/1.6 var(--mono);
+    letter-spacing: .14em;
+    color: var(--ink-2);
+  }
+  .soon-box b { display: block; margin-bottom: 4px; font: 700 15px/1.2 var(--display); letter-spacing: .12em; color: var(--accent); }
+  .team-head { display: flex; align-items: center; gap: 14px; padding-right: 40px; }
+  .team-head .ci {
+    flex: none;
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .team-head .ci svg { width: 26px; height: 26px; }
+  .team-head h3 { margin: 0; font: 700 24px/1.1 var(--display); letter-spacing: .06em; }
+  .sh-text { margin: 16px 0 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.6; }
+  .skills-h { margin: 20px 0 10px; font: 600 10px/1 var(--mono); letter-spacing: .2em; color: var(--ink-3); }
+  .skills { display: flex; flex-wrap: wrap; gap: 7px; }
+  .skill { padding: 7px 11px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--panel); font: 500 13.5px/1.2 var(--sans); }
+  .sh-cta { width: 100%; margin-top: 22px; min-height: 52px; font-size: 15px; }
+  .sh-note { margin: 10px 0 0; text-align: center; font: 500 11.5px/1.4 var(--mono); color: var(--ink-3); }
+  body.sheet-open { overflow: hidden; }
+  @media (min-width: 640px) {
+    dialog.sheet { margin: auto; }
+    .sheet-in { border-radius: 22px; border-bottom: 1px solid var(--line-strong); }
+    .sh-photo { border-radius: 21px 21px 0 0; }
+  }
 
   /* ---------- Sponsorluk ---------- */
   .sponsor h3 {
@@ -553,7 +759,7 @@
   @media (min-width: 640px) {
     .wrap { max-width: 600px; }
     .ac-name { font-size: 17px; }
-    .caps { grid-template-columns: repeat(3, 1fr); }
+    .caps { grid-template-columns: repeat(4, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -566,7 +772,7 @@
 
 <div class="wrap">
   <header class="topbar">
-    <span class="brand"><img class="badge" id="topLogo" alt="Hürtürk İHA logosu" width="30" height="30"><span class="sig"><i></i>SİNYAL · AKTİF</span></span>
+    <span class="brand"><img class="badge" id="topLogo" alt="Kılavuz Hürtürk İHA logosu" width="30" height="30"><span class="sig"><i></i>SİNYAL · AKTİF</span></span>
     <span class="topbar-r">
       <span class="clock" id="clock">TSİ --:--:--</span>
       <button class="icon-btn" id="themeBtn" aria-label="Açık / koyu tema">
@@ -578,6 +784,7 @@
 
   <main>
     <div class="hero">
+      <div class="hero-video" id="heroVideo" aria-hidden="true"><div id="heroYT"></div></div>
       <div class="tape rise" aria-hidden="true">
         <div class="tape-track" id="tapeTrack"></div>
         <span class="tape-read" id="hdg">HDG 000</span>
@@ -595,12 +802,14 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
       </div>
-      <p class="callsign rise" style="animation-delay:.1s" id="callsign"></p>
-      <h1 class="rise" style="animation-delay:.14s" id="teamName"></h1>
+      <h1 class="rise" style="animation-delay:.12s" id="teamName"></h1>
+      <p class="subname rise" style="animation-delay:.15s" id="subName"></p>
       <p class="tagline rise" style="animation-delay:.18s" id="tagline"></p>
       <div class="chips rise" style="animation-delay:.22s" id="chips"></div>
+      <a class="vid-tag" id="vidTag" target="_blank" rel="noopener"><i></i><span id="vidTagTxt"></span></a>
     </div>
 
+    <div class="countdown rise" style="animation-delay:.26s" id="countdown" hidden></div>
     <nav class="links" id="links" aria-label="Takım linkleri"></nav>
 
     <section id="about" class="rise" style="animation-delay:.5s">
@@ -630,7 +839,7 @@
   </main>
 
   <footer>
-    <img class="badge foot-logo" id="footLogo" alt="Hürtürk İHA logosu" width="72" height="72" loading="lazy">
+    <img class="badge foot-logo" id="footLogo" alt="Kılavuz Hürtürk İHA logosu" width="72" height="72" loading="lazy">
     <button class="btn share" id="shareBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg>
       Bu sayfayı paylaş
@@ -642,15 +851,35 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <div class="sheet-in">
+    <span class="sheet-grab" aria-hidden="true"></span>
+    <button class="sheet-x" id="sheetClose" type="button" aria-label="Kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div id="sheetBody"></div>
+  </div>
+</dialog>
+
 <script>
 /* ============================================================
    DÜZENLEME ALANI — linkleri ve yazıları sadece buradan değiştir.
    Boş bırakılan link ("") sitede "YAKINDA" olarak görünür.
    ============================================================ */
 const SITE = {
-  callsign: "CALLSIGN // HT",
-  name: "HÜRTÜRK <span>İHA</span>",
+  name: "KILAVUZ",
+  subName: "HÜRTÜRK İHA TAKIMI",
   tagline: "Tasarla · Üret · Uçur",
+
+  // Girişin arkasında sessiz oynayan uçuş videosu (YouTube video kimliği)
+  heroVideo: { id: "zkf9rLelHu8", title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
+
+  // Başvuru geri sayımı. Tarih Türkiye saatiyle (+03:00). "Cuma 24.00" = Cumartesi 00.00
+  apply: {
+    deadline: "2026-10-17T00:00:00+03:00",
+    deadlineLabel: "16 EKİM CUMA · 24.00",
+    unitField: "entry.699436160",   // formdaki "Görev almak istediğiniz birim" sorusu
+  },
   chips: ["TEKNOFEST", "SABİT KANAT", "OTONOM UÇUŞ"],
 
   // Takım logosu (üst şerit ve alt bilgide görünür)
@@ -659,27 +888,40 @@ const SITE = {
   links: [
     { label: "Takıma Başvur", sub: "Başvuru formunu doldur, ekibe katıl", url: "https://docs.google.com/forms/d/e/1FAIpQLSe-slFZbT-IwBeIVvsvnrCKuLWE-mz9PZtMRb7K2oH-pxWIhA/viewform", icon: "form", primary: true },
     { label: "Instagram",     sub: "@hurturkuav",                          url: "https://www.instagram.com/hurturkuav/", icon: "instagram" },
-    { label: "LinkedIn",      sub: "Hürtürk İHA",                          url: "https://www.linkedin.com/company/hurturkiha/", icon: "linkedin" },
+    { label: "LinkedIn",      sub: "Kılavuz Hürtürk İHA",                          url: "https://www.linkedin.com/company/hurturkiha/", icon: "linkedin" },
     { label: "YouTube",       sub: "@hurturkihatakimi",                    url: "https://www.youtube.com/@hurturkihatakimi", icon: "youtube" },
   ],
 
   // <em>...</em> arasındaki kısım kırmızı vurgulu görünür
-  aboutLead: "Hürtürk, kendilerini <em>ülkemizin geleceğe dair umudunun</em> bir parçası olarak gören gençlerden oluşan bir insansız hava aracı takımıdır.",
+  aboutLead: "Kılavuz Hürtürk, kendilerini <em>ülkemizin geleceğe dair umudunun</em> bir parçası olarak gören gençlerden oluşan bir insansız hava aracı takımıdır.",
   about: "Sabit kanatlı İHA'larımızı kendimiz tasarlıyor, üretiyor ve uçuruyoruz. Teknofest için otonom uçuş ve görüntü işleme üzerinde çalışıyor, fikirlerimizi simülasyondan sahaya taşıyoruz.",
-  // icon: "mekanik" | "yazilim" | "elektronik"
-  capabilities: [
-    { label: "Mekanik",    icon: "mekanik" },
-    { label: "Yazılım",    icon: "yazilim" },
-    { label: "Elektronik", icon: "elektronik" },
+  // Alt ekipler. "unit" formdaki seçenekle birebir aynı olmalı (form o birim seçili açılır).
+  teams: [
+    { label: "Mekanik", unit: "Mekanik", icon: "mekanik",
+      text: "Uçaklarımızı tasarlıyor, üretiyor ve sahada tamir ediyoruz.",
+      skills: ["CAD (SolidWorks)", "XFLR5", "Kompozit", "Huş plaka ve köpük işçiliği", "Aerodinamik merakı"] },
+    { label: "Yazılım", unit: "Yazılım", icon: "yazilim",
+      text: "Otonom uçuş, görüntü işleme ve yer istasyonu yazılımımızı geliştiriyoruz.",
+      skills: ["Python", "OpenCV / YOLO", "ROS 2", "MAVLink / ArduPilot"] },
+    { label: "Elektronik", unit: "Elektronik", icon: "elektronik",
+      text: "Aviyonik, güç dağıtımı, telemetri ve görev bilgisayarı entegrasyonunu yapıyoruz.",
+      skills: ["Lehim ve kablolama", "Pixhawk kurulumu", "Devre tasarımı"] },
+    { label: "Sponsor & Medya", unit: "Sponsor/Sosyal Medya", icon: "medya",
+      text: "Takımın sesiyiz: sponsorlarla görüşüyor, sosyal medyamızı yönetiyor ve çalışmalarımızı tanıtıyoruz.",
+      skills: ["İnsanlarla rahat iletişim", "İkna ve sunum becerisi", "Resmi yazışma ve teklif dosyası", "Sosyal medya içerik üretimi", "Canva / video kurgu"] },
   ],
 
-  // Yeni uçak eklemek için bir satır ekle: { name: "HT-...", photo: "filo-....jpg" }
-  // Fotoğraf dikey (4:5) olursa en iyi görünür.
+  // Filo. Karta dokununca detaylar açılır; "specs: null" olan uçakta "yakında" yazar.
+  // video: YouTube linki verilirse detayda "Uçuş videosunu izle" butonu çıkar.
   fleet: [
-    { name: "HT-YAMALI",   photo: "filo-yamali.jpg" },
-    { name: "HT-ALAZ",     photo: "filo-alaz.jpg" },
-    { name: "HT-İSTİKBAL", photo: "filo-istikbal.jpg" },
-    { name: "HT-KÖREKE",   photo: "filo-koreke.jpg" },
+    { name: "HT-YAMALI", photo: "filo-yamali.jpg", role: "Savaşan İHA", year: "2024", video: "",
+      specs: { wingspan: "130 cm", length: "95 cm", weight: "3 kg", endurance: "36 dk", speed: "15 m/s",
+               motor: "SunnySky 2820", prop: "APC 11×5.5", battery: "16,8 V" } },
+    { name: "HT-ALAZ", photo: "filo-alaz.jpg", role: "Savaşan İHA", year: "2026", video: "",
+      specs: { wingspan: "210 cm", length: "120 cm", weight: "5 kg", endurance: "30 dk", speed: "17 m/s",
+               motor: "2× T-Motor AM480", prop: "APC 12×6", battery: "25,4 V" } },
+    { name: "HT-İSTİKBAL", photo: "filo-istikbal.jpg", specs: null },
+    { name: "HT-KÖREKE",   photo: "filo-koreke.jpg",   specs: null },
   ],
 
   sponsor: {
@@ -689,7 +931,7 @@ const SITE = {
     deckUrl: "",        // isteğe bağlı: sponsorluk dosyası (PDF / Drive linki)
   },
 
-  footer: "© 2026 HÜRTÜRK İHA TAKIMI",
+  footer: "© 2026 KILAVUZ HÜRTÜRK İHA TAKIMI",
 };
 /* ============================ DÜZENLEME ALANI SONU ============================ */
 
@@ -704,6 +946,9 @@ const ICONS = {
   arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>',
   mekanik: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
   yazilim: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6M14 4l-4 16"/></svg>',
+  medya: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5v3a1 1 0 0 0 1 1h2.5L12 19V5L6.5 9.5H4a1 1 0 0 0-1 1z"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6a8 8 0 0 1 0 12"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>',
   elektronik: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx=".5"/><path d="M9.5 2v4M14.5 2v4M9.5 18v4M14.5 18v4M2 9.5h4M2 14.5h4M18 9.5h4M18 14.5h4"/></svg>',
 };
 
@@ -761,8 +1006,8 @@ const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 })();
 
 /* ---------- Hero ---------- */
-$("callsign").textContent = SITE.callsign;
-$("teamName").innerHTML = SITE.name;
+$("teamName").textContent = SITE.name;
+$("subName").textContent = SITE.subName;
 $("tagline").textContent = SITE.tagline;
 $("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span>`).join("");
 
@@ -984,8 +1229,23 @@ $("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span
   tick(); setInterval(tick, 1000);
 })();
 
+/* ---------- Başvuru durumu ---------- */
+const deadlineMs = SITE.apply && SITE.apply.deadline ? Date.parse(SITE.apply.deadline) : NaN;
+const applyClosed = () => !isNaN(deadlineMs) && Date.now() >= deadlineMs;
+const applyBase = () => (SITE.links.find((l) => l.primary) || {}).url || "";
+function applyUrl(unit) {
+  const base = applyBase();
+  if (!base || !unit || !SITE.apply.unitField) return base;
+  const u = new URL(base);
+  u.searchParams.set("usp", "pp_url");
+  u.searchParams.set(SITE.apply.unitField, unit);
+  return u.toString();
+}
+
 /* ---------- Linkler ---------- */
+function renderLinks() {
 $("links").innerHTML = SITE.links.map((l, i) => {
+  if (l.primary && applyClosed()) l = { ...l, url: "", label: "Başvurular Kapandı", sub: "Yeni dönem için Instagram'ı takip et" };
   const has = !!l.url;
   const cls = `link brk rise${l.primary ? " primary" : ""}${has ? "" : " off"}`;
   const delay = `style="animation-delay:${0.28 + i * 0.06}s"`;
@@ -996,23 +1256,163 @@ $("links").innerHTML = SITE.links.map((l, i) => {
     ? `<a class="${cls}" ${delay} href="${esc(l.url)}" target="_blank" rel="noopener">${body}</a>`
     : `<div class="${cls}" ${delay} aria-disabled="true">${body}</div>`;
 }).join("");
+}
+renderLinks();
+
+/* ---------- Geri sayım ---------- */
+(function countdown() {
+  const box = $("countdown");
+  if (isNaN(deadlineMs)) return;
+  box.hidden = false;
+  const pad = (n) => String(n).padStart(2, "0");
+  let wasClosed = applyClosed();
+  if (wasClosed) {
+    box.className = "countdown closed";
+    box.innerHTML = `<div class="cd-top"><b>BAŞVURULAR KAPANDI</b></div>`;
+    return;
+  }
+  box.innerHTML = `
+    <div class="cd-top"><b>BAŞVURULAR KAPANIYOR</b><span>${esc(SITE.apply.deadlineLabel || "")}</span></div>
+    <div class="cd-digits" role="timer" aria-live="off">
+      <div><b id="cdD">00</b><span>GÜN</span></div><i>:</i>
+      <div><b id="cdH">00</b><span>SAAT</span></div><i>:</i>
+      <div><b id="cdM">00</b><span>DAKİKA</span></div><i>:</i>
+      <div><b id="cdS">00</b><span>SANİYE</span></div>
+    </div>`;
+  const D = $("cdD"), H = $("cdH"), M = $("cdM"), S = $("cdS");
+  function tick() {
+    const left = deadlineMs - Date.now();
+    if (left <= 0) {
+      clearInterval(timer);
+      box.className = "countdown closed";
+      box.innerHTML = `<div class="cd-top"><b>BAŞVURULAR KAPANDI</b></div>`;
+      renderLinks();
+      return;
+    }
+    const sec = Math.floor(left / 1000);
+    D.textContent = pad(Math.floor(sec / 86400));
+    H.textContent = pad(Math.floor(sec / 3600) % 24);
+    M.textContent = pad(Math.floor(sec / 60) % 60);
+    S.textContent = pad(sec % 60);
+    box.classList.toggle("urgent", left < 86400000);
+  }
+  const timer = setInterval(tick, 1000);
+  tick();
+})();
 
 /* ---------- Hakkımızda ---------- */
 $("aboutLead").innerHTML = SITE.aboutLead;
 $("aboutText").innerHTML = SITE.about;
-$("caps").innerHTML = SITE.capabilities.map((c, i) => `
-  <div class="cap brk"><span class="n">${String(i + 1).padStart(2, "0")}</span>
-    <span class="ci">${ICONS[c.icon] || ""}</span><span class="cl">${esc(c.label)}</span></div>`).join("");
+$("caps").innerHTML = SITE.teams.map((c, i) => `
+  <button class="cap brk" type="button" data-i="${i}" aria-haspopup="dialog"><span class="n">${String(i + 1).padStart(2, "0")}</span>
+    <span class="plus">${ICONS.plus}</span>
+    <span class="ci">${ICONS[c.icon] || ""}</span><span class="cl">${esc(c.label)}</span></button>`).join("");
 
 /* ---------- Filo ---------- */
 $("fleetCount").textContent = String(SITE.fleet.length).padStart(2, "0") + " HAVA ARACI";
-$("fleet").innerHTML = SITE.fleet.map((a) => `
-  <article class="ac brk rise">
+$("fleet").innerHTML = SITE.fleet.map((a, i) => `
+  <button class="ac brk rise" type="button" data-i="${i}" aria-haspopup="dialog" aria-label="${esc(a.name)} detayları">
+    <span class="ac-more" aria-hidden="true">${ICONS.plus}</span>
     <div class="ac-img">${a.photo
       ? `<img src="${esc(a.photo)}" alt="${esc(a.name)}" loading="lazy" width="420" height="525">`
       : `<svg viewBox="0 0 100 100" role="img" aria-label="${esc(a.name)}">${SHAPES[a.shape] || SHAPES.trainer}</svg>`}</div>
     <div class="ac-name">${esc(a.name)}</div>
-  </article>`).join("");
+  </button>`).join("");
+
+/* ---------- Detay paneli (uçak & ekip) ---------- */
+const sheet = $("sheet");
+function openSheet(html) {
+  $("sheetBody").innerHTML = html;
+  sheet.querySelector(".sheet-in").scrollTop = 0;
+  if (typeof sheet.showModal === "function") sheet.showModal(); else sheet.setAttribute("open", "");
+  document.body.classList.add("sheet-open");
+}
+function closeSheet() { if (sheet.open) { if (typeof sheet.close === "function") sheet.close(); else sheet.removeAttribute("open"); } }
+sheet.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+sheet.addEventListener("click", (e) => { if (e.target === sheet) closeSheet(); });
+$("sheetClose").addEventListener("click", closeSheet);
+
+const splitVal = (v) => { const m = String(v).match(/^(.*\S)\s+(\S+)$/); return m ? `${esc(m[1])}<small>${esc(m[2])}</small>` : esc(v); };
+const STAT_KEYS = [["wingspan", "KANAT AÇIKLIĞI"], ["weight", "KALKIŞ AĞIRLIĞI"], ["endurance", "UÇUŞ SÜRESİ"]];
+const SPEC_KEYS = [["length", "Gövde uzunluğu"], ["speed", "Hız"], ["motor", "Motor"], ["prop", "Pervane"], ["battery", "Batarya"]];
+
+function fleetSheet(a) {
+  const sp = a.specs;
+  const tags = [a.role && `<span class="tag red">${esc(a.role.toLocaleUpperCase("tr-TR"))}</span>`, a.year && `<span class="tag">${esc(a.year)}</span>`].filter(Boolean).join("");
+  let body = `<p class="sh-kicker">FİLO</p><div class="sh-title"><h3 id="sheetTitle">${esc(a.name)}</h3>${tags}</div>`;
+  if (!sp) {
+    body += `<div class="soon-box"><b>YAKINDA</b>Teknik bilgiler yakında yüklenecek.</div>`;
+  } else {
+    const stats = STAT_KEYS.filter(([k]) => sp[k]).map(([k, l]) => `<div class="stat"><b>${splitVal(sp[k])}</b><span>${l}</span></div>`).join("");
+    const rows = SPEC_KEYS.filter(([k]) => sp[k]).map(([k, l]) => `<div><dt>${l}</dt><dd>${esc(sp[k])}</dd></div>`).join("");
+    body += (stats ? `<div class="stats">${stats}</div>` : "") + (rows ? `<dl class="specs">${rows}</dl>` : "");
+  }
+  if (a.video) body += `<a class="btn solid sh-cta" href="${esc(a.video)}" target="_blank" rel="noopener">${ICONS.play}Uçuş videosunu izle</a>`;
+  const photo = a.photo ? `<div class="sh-photo"><img src="${esc(a.photo)}" alt="${esc(a.name)}"></div>` : "";
+  return photo + `<div class="sh-body${photo ? "" : " pad-top"}">${body}</div>`;
+}
+
+function teamSheet(t, i) {
+  const closed = applyClosed();
+  const url = applyUrl(t.unit);
+  const cta = closed || !url
+    ? `<span class="btn solid off sh-cta">Başvurular kapandı</span>`
+    : `<a class="btn solid sh-cta" href="${esc(url)}" target="_blank" rel="noopener">${ICONS.form}Bu ekibe başvur</a>
+       <p class="sh-note">Form, "${esc(t.unit)}" birimi seçili açılır.</p>`;
+  return `<div class="sh-body pad-top">
+    <div class="team-head"><span class="ci">${ICONS[t.icon] || ""}</span>
+      <div><p class="sh-kicker">ALT EKİP ${String(i + 1).padStart(2, "0")}</p><h3 id="sheetTitle">${esc(t.label)}</h3></div></div>
+    <p class="sh-text">${esc(t.text)}</p>
+    ${t.skills && t.skills.length ? `<p class="skills-h">ARANAN</p><div class="skills">${t.skills.map((k) => `<span class="skill">${esc(k)}</span>`).join("")}</div>` : ""}
+    ${cta}
+  </div>`;
+}
+
+$("fleet").addEventListener("click", (e) => { const b = e.target.closest(".ac"); if (b) openSheet(fleetSheet(SITE.fleet[+b.dataset.i])); });
+$("caps").addEventListener("click", (e) => { const b = e.target.closest(".cap"); if (b) openSheet(teamSheet(SITE.teams[+b.dataset.i], +b.dataset.i)); });
+
+/* ---------- Arka plan videosu ---------- */
+(function heroVideo() {
+  const v = SITE.heroVideo;
+  const host = $("heroVideo"), tag = $("vidTag");
+  if (!v || !v.id) { host.remove(); tag.remove(); return; }
+  tag.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id);
+  $("vidTagTxt").textContent = v.title || "";
+  const conn = navigator.connection;
+  if (reduceMotion || (conn && conn.saveData)) return;
+  let player = null, shown = false, t = 0;
+  function show() { if (shown) return; shown = true; host.classList.add("on"); tag.classList.add("on"); }
+  window.onYouTubeIframeAPIReady = () => {
+    player = new YT.Player("heroYT", {
+      videoId: v.id,
+      host: "https://www.youtube-nocookie.com",
+      playerVars: { autoplay: 1, mute: 1, controls: 0, loop: 1, playlist: v.id, playsinline: 1, rel: 0,
+                    modestbranding: 1, disablekb: 1, fs: 0, iv_load_policy: 3, start: v.start || 0 },
+      events: {
+        onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+        onStateChange: (e) => {
+          if (e.data === 1) { clearTimeout(t); t = setTimeout(show, 1600); }
+          if (e.data === 0) { e.target.seekTo(v.start || 0); e.target.playVideo(); }
+        },
+      },
+    });
+  };
+  // Giriş ekrandan çıkınca videoyu durdur (pil ve veri tasarrufu)
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver((ents) => ents.forEach((en) => {
+      if (!player || !player.playVideo) return;
+      en.isIntersecting ? player.playVideo() : player.pauseVideo();
+    }), { threshold: 0 }).observe(document.querySelector(".hero"));
+  }
+  const load = () => {
+    const sc = document.createElement("script");
+    sc.src = "https://www.youtube.com/iframe_api";
+    sc.async = true;
+    document.head.appendChild(sc);
+  };
+  if (document.readyState === "complete") setTimeout(load, 300);
+  else window.addEventListener("load", () => setTimeout(load, 300));
+})();
 
 /* ---------- Logo ---------- */
 ["topLogo", "footLogo"].forEach((id) => { const el = $(id); if (SITE.logo) el.src = SITE.logo; else el.remove(); });
@@ -1023,7 +1423,7 @@ $("fleet").innerHTML = SITE.fleet.map((a) => `
   $("sponsorTitle").textContent = sp.title;
   $("sponsorText").textContent = sp.text;
   const mail = sp.email;
-  const subj = encodeURIComponent("Sponsorluk / İş Birliği — Hürtürk İHA");
+  const subj = encodeURIComponent("Sponsorluk / İş Birliği — Kılavuz Hürtürk İHA");
   let html = mail
     ? `<a class="btn solid" href="mailto:${esc(mail)}?subject=${subj}">${ICONS.handshake}Sponsor Ol</a>
        <a class="btn" href="mailto:${esc(mail)}">${ICONS.mail}E-posta</a>`
@@ -1037,7 +1437,7 @@ $("fleet").innerHTML = SITE.fleet.map((a) => `
 $("copy").textContent = SITE.footer;
 const toast = (msg) => { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 1800); };
 $("shareBtn").addEventListener("click", async () => {
-  const data = { title: document.title, text: "Hürtürk İHA Takımı", url: location.href };
+  const data = { title: document.title, text: "Kılavuz Hürtürk İHA Takımı", url: location.href };
   try {
     if (navigator.share) { await navigator.share(data); return; }
     await navigator.clipboard.writeText(location.href);
