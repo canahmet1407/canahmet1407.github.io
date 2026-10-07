@@ -890,8 +890,10 @@ const SITE = {
 
   // Girişin arkasındaki uçuş videosu.
   //  id:   YouTube video kimliği (kapak karesi + bilgisayarda YouTube oynatıcısı)
-  //  file: siteye yüklenen kısa, sessiz .mp4 (verilirse telefon dahil her yerde bu oynar)
-  heroVideo: { id: "zkf9rLelHu8", file: "", title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
+  //  file: siteye yüklenen kısa, sessiz video(lar); verilirse telefon dahil her yerde bu oynar
+  //  poster: video yüklenene kadar (ya da oynatılamazsa) görünen kare
+  heroVideo: { id: "zkf9rLelHu8", file: ["ucus-2018.mp4", "ucus-2018.webm"], poster: "ucus-2018.jpg",
+               title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
 
   // Başvuru geri sayımı. Tarih Türkiye saatiyle (+03:00). "Cuma 24.00" = Cumartesi 00.00
   apply: {
@@ -1397,8 +1399,9 @@ $("caps").addEventListener("click", (e) => { const b = e.target.closest(".cap");
 (function heroVideo() {
   const v = SITE.heroVideo;
   const host = $("heroVideo"), tag = $("vidTag"), poster = $("heroPoster");
-  if (!v || (!v.id && !v.file)) { host.remove(); tag.remove(); return; }
-  tag.href = v.id ? "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id) : v.file;
+  const files = [].concat(v && v.file || []).filter(Boolean);
+  if (!v || (!v.id && !files.length)) { host.remove(); tag.remove(); return; }
+  tag.href = v.id ? "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id) : files[0];
   $("vidTagTxt").textContent = v.title || "";
 
   const posterUrl = v.poster || (v.id ? `https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/maxresdefault.jpg` : "");
@@ -1420,13 +1423,18 @@ $("caps").addEventListener("click", (e) => { const b = e.target.closest(".cap");
     }), { threshold: 0 }).observe(document.querySelector(".hero"));
   }
 
-  if (v.file) {
+  if (files.length) {
     const vid = document.createElement("video");
     vid.muted = true; vid.defaultMuted = true; vid.loop = true; vid.autoplay = true;
     vid.playsInline = true; vid.preload = "auto";
     ["muted", "playsinline", "autoplay", "loop"].forEach((k) => vid.setAttribute(k, ""));
     if (posterUrl) vid.poster = posterUrl;
-    vid.src = v.file;
+    files.forEach((f) => {
+      const src = document.createElement("source");
+      src.src = f;
+      src.type = /\.webm$/i.test(f) ? "video/webm" : "video/mp4";
+      vid.appendChild(src);
+    });
     vid.addEventListener("playing", playing);
     host.appendChild(vid);
     const tryPlay = () => vid.play().catch(() => {});
