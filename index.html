@@ -199,18 +199,6 @@
       radial-gradient(110% 80% at 50% 42%, rgba(var(--bg-rgb), .42), rgba(var(--bg-rgb), .86) 72%),
       linear-gradient(180deg, rgba(var(--bg-rgb), .55), rgba(var(--bg-rgb), .15) 30%, rgba(var(--bg-rgb), .35) 70%, rgba(var(--bg-rgb), 1));
   }
-  .vid-tag {
-    position: absolute !important; right: 0; bottom: 4px;
-    display: inline-flex; align-items: center; gap: 7px;
-    font: 600 9.5px/1 var(--mono);
-    letter-spacing: .14em;
-    color: var(--ink-3);
-    opacity: 0; visibility: hidden;
-    transition: opacity 1s ease 1s, color .2s;
-  }
-  .vid-tag.on { opacity: 1; visibility: visible; }
-  .vid-tag:hover { color: var(--ink); }
-  .vid-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1.2s steps(2) infinite; }
   @keyframes blink { 50% { opacity: .2; } }
 
   /* Başvuru geri sayımı */
@@ -823,7 +811,6 @@
       <p class="subname rise" style="animation-delay:.15s" id="subName"></p>
       <p class="tagline rise" style="animation-delay:.18s" id="tagline"></p>
       <div class="chips rise" style="animation-delay:.22s" id="chips"></div>
-      <a class="vid-tag" id="vidTag" target="_blank" rel="noopener"><i></i><span id="vidTagTxt"></span></a>
     </div>
 
     <div class="countdown rise" style="animation-delay:.26s" id="countdown" hidden></div>
@@ -893,7 +880,7 @@ const SITE = {
   //  file: siteye yüklenen kısa, sessiz video(lar); verilirse telefon dahil her yerde bu oynar
   //  poster: video yüklenene kadar (ya da oynatılamazsa) görünen kare
   heroVideo: { id: "zkf9rLelHu8", file: ["ucus-2018.mp4", "ucus-2018.webm"], poster: "ucus-2018.jpg",
-               title: "HÜRTÜRK 2018 · UÇUŞ TESTİ", start: 0 },
+               start: 0 },
 
   // Başvuru geri sayımı. Tarih Türkiye saatiyle (+03:00). "Cuma 24.00" = Cumartesi 00.00
   apply: {
@@ -1398,15 +1385,13 @@ $("caps").addEventListener("click", (e) => { const b = e.target.closest(".cap");
    3) Yoksa yalnız bilgisayarda YouTube oynatıcısı açılır; YouTube telefonda kendiliğinden oynatmıyor. */
 (function heroVideo() {
   const v = SITE.heroVideo;
-  const host = $("heroVideo"), tag = $("vidTag"), poster = $("heroPoster");
+  const host = $("heroVideo"), poster = $("heroPoster");
   const files = [].concat(v && v.file || []).filter(Boolean);
-  if (!v || (!v.id && !files.length)) { host.remove(); tag.remove(); return; }
-  tag.href = v.id ? "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id) : files[0];
-  $("vidTagTxt").textContent = v.title || "";
+  if (!v || (!v.id && !files.length)) { host.remove(); return; }
 
   const posterUrl = v.poster || (v.id ? `https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/maxresdefault.jpg` : "");
-  const reveal = () => { host.classList.add("on"); tag.classList.add("on"); };
-  const playing = () => { host.classList.add("on", "playing"); tag.classList.add("on"); };
+  const reveal = () => host.classList.add("on");
+  const playing = () => host.classList.add("on", "playing");
   if (posterUrl) {
     const im = new Image();
     im.onload = () => { poster.style.backgroundImage = `url("${posterUrl}")`; reveal(); };
