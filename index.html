@@ -189,6 +189,28 @@
     filter: drop-shadow(0 0 22px var(--accent-soft));
   }
   .adi svg { width: 100%; height: 100%; overflow: visible; }
+  .adi.tappable { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .sensor {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: -4px auto 16px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--panel);
+    font: 600 10px/1 var(--mono);
+    letter-spacing: .14em;
+    color: var(--ink-2);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color .2s, color .2s;
+  }
+  .sensor[hidden] { display: none; }
+  .sensor svg { width: 14px; height: 14px; color: var(--accent); }
+  .sensor i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); }
+  .sensor.live { color: var(--ink); border-color: rgba(52, 211, 153, .45); }
+  .sensor.live i { background: var(--ok); animation: ping 2.4s ease-out infinite; }
+  .sensor.live svg { display: none; }
+  .sensor.err { color: var(--ink-3); border-style: dashed; }
   .adi .ring { fill: none; stroke: var(--line-strong); stroke-width: 1; }
   .adi .ring-in { fill: none; stroke: var(--accent); stroke-width: 1.6; }
   .adi .tick { stroke: var(--ink-2); stroke-width: 1.4; }
@@ -563,6 +585,10 @@
       </div>
 
       <div class="adi rise" style="animation-delay:.05s" id="adi" aria-hidden="true"></div>
+      <button class="sensor" id="sensorBtn" type="button" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/><path d="M3 9a9 9 0 0 1 2-4M21 9a9 9 0 0 0-2-4M3 15a9 9 0 0 0 2 4M21 15a9 9 0 0 1-2 4"/></svg>
+        <i></i><span id="sensorTxt">SENSÖRLERİ AÇ</span>
+      </button>
 
       <div class="stars rise" style="animation-delay:.08s" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7.3L12 17.6 5.7 21.5l1.7-7.3L2 9.5l7.1-.6z"/></svg>
@@ -751,12 +777,12 @@ $("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span
     ticks += `<line class="tick${big ? " big" : ""}" x1="${(r1 * Math.cos(rad)).toFixed(2)}" y1="${(r1 * Math.sin(rad)).toFixed(2)}" x2="${(r2 * Math.cos(rad)).toFixed(2)}" y2="${(r2 * Math.sin(rad)).toFixed(2)}"/>`;
   });
   let ladder = "";
-  [-20, -10, 10, 20].forEach((p) => {
-    const y = -p * 2.2, w = Math.abs(p) === 10 ? 18 : 28;
+  [-30, -20, -10, 10, 20, 30].forEach((p) => {
+    const y = -p * 2.2, w = Math.abs(p) === 10 ? 18 : Math.abs(p) === 20 ? 28 : 34;
     ladder += `<line class="pl" x1="${-w}" x2="${w}" y1="${y}" y2="${y}"/>`;
     ladder += `<text class="pl-t" x="${w + 4}" y="${y + 2.5}">${Math.abs(p)}</text><text class="pl-t" x="${-w - 14}" y="${y + 2.5}">${Math.abs(p)}</text>`;
   });
-  [-5, 5, -15, 15].forEach((p) => { const y = -p * 2.2; ladder += `<line class="pl" x1="-8" x2="8" y1="${y}" y2="${y}"/>`; });
+  [-5, 5, -15, 15, -25, 25].forEach((p) => { const y = -p * 2.2; ladder += `<line class="pl" x1="-8" x2="8" y1="${y}" y2="${y}"/>`; });
 
   const inner = `
       <g clip-path="url(#adiClip)">
@@ -780,8 +806,9 @@ $("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span
     </svg>`;
 })();
 
-/* Pusula bandı */
-(function tape() {
+/* Pusula bandı + yapay ufuk
+   Masaüstünde demo animasyonu oynar; telefonda jiroskop/pusula sensörleriyle gerçek zamanlı çalışır. */
+(function instruments() {
   const PX = 1.6; // derece başına piksel
   const W = 360 * PX;
   const names = { 0: "K", 90: "D", 180: "G", 270: "B" }; // Kuzey, Doğu, Güney, Batı
@@ -802,22 +829,149 @@ $("chips").innerHTML = SITE.chips.map((c) => `<span class="chip">${esc(c)}</span
   const horizon = document.getElementById("horizon");
   const rollPtr = document.getElementById("rollPtr");
   const hdgEl = $("hdg"), altEl = $("teleAlt"), spdEl = $("teleSpd");
-  const t0 = performance.now();
+  const adiEl = $("adi"), btn = $("sensorBtn"), btnTxt = $("sensorTxt");
 
+  const D2R = Math.PI / 180, R2D = 180 / Math.PI;
+  const wrap360 = (x) => ((x % 360) + 360) % 360;
+  const angDiff = (from, to) => ((to - from + 540) % 360) - 180; // en kısa yoldan fark
+  const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+
+  // hdg/roll/pitch: ekranda gösterilen; tH/tR/tP: sensörden gelen hedef
+  const st = { mode: "demo", hdg: 274, roll: 0, pitch: 0, tH: 274, tR: 0, tP: 0,
+               rawPitch: 0, pitch0: null, compass: false, startAt: 0 };
+  window.__htInstruments = st;
+
+  const screenAngle = () =>
+    (screen.orientation && typeof screen.orientation.angle === "number") ? screen.orientation.angle : (window.orientation || 0);
+
+  function onOrient(e, isAbsEvent) {
+    if (e.beta == null || e.gamma == null) return;
+    const iosHeading = typeof e.webkitCompassHeading === "number" && !isNaN(e.webkitCompassHeading);
+    if (!isAbsEvent && st.absEvents && !iosHeading) return; // mutlak akış varken göreli olayı atla
+
+    const a = (e.alpha || 0) * D2R, b = e.beta * D2R, g = e.gamma * D2R;
+    const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b), cg = Math.cos(g), sg = Math.sin(g);
+    const scr = screenAngle() * D2R, ss = Math.sin(scr), cs = Math.cos(scr);
+
+    // Dünyanın "yukarı" yönü, cihaz ekseninde (yerçekiminin tersi)
+    const ux = -cb * sg, uy = sb, uz = cb * cg;
+    // Ekran eksenine çevir (yatay tutuşu da destekler)
+    const ex = ux * cs - uy * ss;   // ekranın sağı
+    const ey = ux * ss + uy * cs;   // ekranın üstü
+
+    // Yatış: telefon direksiyon gibi döndükçe gerçek ufukla hizalı kalır
+    st.tR = Math.asin(clamp(-ex, -1, 1)) * R2D;
+    // Yunuslama: tutuş açısına göre (ilk okumada sıfırlanır)
+    st.rawPitch = Math.atan2(uz, ey) * R2D;
+    if (st.pitch0 === null && performance.now() - st.startAt > 350) st.pitch0 = st.rawPitch;
+    st.tP = st.pitch0 === null ? 0 : clamp(angDiff(st.rawPitch, st.pitch0), -90, 90);
+
+    // Pusula: telefonun "burnu" = gövde düzleminde (üst kenar–arka kamera) yere paralel olan yön.
+    // Dik tutuşta arka kamera, düz tutuşta üst kenar; yana yatırmak (roll) yönü kaydırmaz.
+    if (iosHeading) {
+      st.tH = wrap360(e.webkitCompassHeading + screenAngle());
+      st.compass = true;
+    } else {
+      const R00 = ca * cg - sa * sb * sg, R01 = -sa * cb, R02 = ca * sg + sa * sb * cg;
+      const R10 = sa * cg + ca * sb * sg, R11 = ca * cb, R12 = sa * sg - ca * sb * cg;
+      const Tx = R00 * ss + R01 * cs, Ty = R10 * ss + R11 * cs;   // ekranın üstü
+      const Vx = -R02, Vy = -R12;                                 // arka kamera
+      const wT = uz, wV = ey;
+      const Fx = wT * Tx + wV * Vx, Fy = wT * Ty + wV * Vy;
+      if (Math.hypot(Fx, Fy) > 0.15) st.tH = wrap360(Math.atan2(Fx, Fy) * R2D);
+      st.compass = isAbsEvent;
+    }
+    if (st.mode !== "live") goLive();
+  }
+
+  function setBtn(text, cls) {
+    btn.hidden = false;
+    btn.className = "sensor" + (cls ? " " + cls : "");
+    btnTxt.textContent = text;
+  }
+
+  function goLive() {
+    st.mode = "live";
+    st.hdg = st.tH; st.roll = st.tR; st.pitch = st.tP;
+    setBtn(st.compass ? "CANLI · SIFIRLAMAK İÇİN DOKUN" : "CANLI GYRO · SIFIRLAMAK İÇİN DOKUN", "live");
+    altEl.parentElement.classList.add("live");
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+
+  let attached = false;
+  function attach() {
+    if (attached) return;
+    attached = true;
+    st.startAt = performance.now();
+    if ("ondeviceorientationabsolute" in window) {
+      window.addEventListener("deviceorientationabsolute", (e) => { st.absEvents = true; onOrient(e, true); });
+    }
+    window.addEventListener("deviceorientation", (e) => onOrient(e, e.absolute === true));
+    setTimeout(() => { if (st.mode !== "live") setBtn("SENSÖR BULUNAMADI", "err"); }, 2500);
+  }
+
+  async function start() {
+    if (st.mode === "live") {           // canlıyken dokunmak = ufku sıfırla
+      st.pitch0 = st.rawPitch;
+      toast("Ufuk sıfırlandı");
+      return;
+    }
+    try {
+      const DOE = window.DeviceOrientationEvent;
+      if (DOE && typeof DOE.requestPermission === "function") {   // iOS izin ister
+        const res = await DOE.requestPermission();
+        if (res !== "granted") { setBtn("İZİN VERİLMEDİ", "err"); return; }
+      }
+      setBtn("BAĞLANIYOR…");
+      attach();
+    } catch (err) {
+      setBtn("SENSÖR AÇILAMADI", "err");
+    }
+  }
+
+  const touch = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+  if (touch && "DeviceOrientationEvent" in window) {
+    btn.hidden = false;
+    adiEl.classList.add("tappable");
+    btn.addEventListener("click", start);
+    adiEl.addEventListener("click", start);
+    // İzin gerektirmeyen tarayıcılarda (Android) kendiliğinden başla
+    if (typeof DeviceOrientationEvent.requestPermission !== "function") attach();
+  }
+
+  let running = true;
+  const t0 = performance.now();
+  let lastTele = 0;
   function frame(now) {
     const t = (now - t0) / 1000;
-    const hdg = (274 + t * 4) % 360;
-    track.style.transform = `translateX(${-hdg * PX}px)`;
-    hdgEl.textContent = "HDG " + String(Math.round(hdg) % 360).padStart(3, "0");
-    const roll = 8 * Math.sin(t * 0.45);
-    const pitch = 4 * Math.sin(t * 0.31 + 1);
-    if (horizon) horizon.setAttribute("transform", `rotate(${roll.toFixed(2)}) translate(0 ${(pitch * 2.2).toFixed(2)})`);
-    if (rollPtr) rollPtr.setAttribute("transform", `rotate(${roll.toFixed(2)})`);
-    if (Math.floor(t * 4) % 4 === 0) {
-      altEl.textContent = "ALT " + Math.round(120 + 6 * Math.sin(t * 0.2)) + "M";
-      spdEl.textContent = "GS " + (18 + 1.5 * Math.sin(t * 0.33)).toFixed(1) + "M/S";
+    if (st.mode === "demo") {
+      st.hdg = wrap360(274 + t * 4);
+      st.roll = 8 * Math.sin(t * 0.45);
+      st.pitch = 4 * Math.sin(t * 0.31 + 1);
+    } else {
+      st.hdg = wrap360(st.hdg + angDiff(st.hdg, st.tH) * 0.15);
+      st.roll += (st.tR - st.roll) * 0.25;
+      st.pitch += (st.tP - st.pitch) * 0.25;
     }
-    if (!reduceMotion) requestAnimationFrame(frame);
+    const p = clamp(st.pitch, -40, 40) * 2.2;
+    track.style.transform = `translateX(${(-st.hdg * PX).toFixed(1)}px)`;
+    hdgEl.textContent = "HDG " + String(Math.round(st.hdg) % 360).padStart(3, "0");
+    if (horizon) horizon.setAttribute("transform", `rotate(${(-st.roll).toFixed(2)}) translate(0 ${p.toFixed(2)})`);
+    if (rollPtr) rollPtr.setAttribute("transform", `rotate(${(-st.roll).toFixed(2)})`);
+
+    if (now - lastTele > 200) {
+      lastTele = now;
+      if (st.mode === "live") {
+        const sgn = (v) => (v >= 0 ? "+" : "−") + String(Math.abs(Math.round(v))).padStart(2, "0");
+        altEl.textContent = "ROLL " + sgn(st.roll) + "°";
+        spdEl.textContent = "PITCH " + sgn(st.pitch) + "°";
+      } else {
+        altEl.textContent = "ALT " + Math.round(120 + 6 * Math.sin(t * 0.2)) + "M";
+        spdEl.textContent = "GS " + (18 + 1.5 * Math.sin(t * 0.33)).toFixed(1) + "M/S";
+      }
+    }
+    if (!reduceMotion || st.mode === "live") requestAnimationFrame(frame);
+    else running = false;
   }
   requestAnimationFrame(frame);
 })();
