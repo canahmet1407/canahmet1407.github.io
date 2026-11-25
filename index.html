@@ -1,344 +1,243 @@
 <!doctype html>
-<html lang="tr" data-theme="dark">
+<html lang="tr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Can Ahmet Atik — Görüntü İşleme & Gömülü Yapay Zeka</title>
-<meta name="description" content="Can Ahmet Atik — Mekatronik Mühendisliği öğrencisi, HÜRTÜRK İHA Takımı kaptanı ve görüntü işleme lideri. Gerçek zamanlı tespit, hedef takibi ve gömülü yapay zeka.">
-<meta name="theme-color" content="#080c16">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Can Ahmet Atik — Görüntü İşleme & Gömülü Yapay Zeka">
-<meta property="og:description" content="Otonom İHA'larda gerçek zamanlı tespit, hibrit hedef takibi ve Hailo-8 üzerinde gömülü yapay zeka.">
+<title>Can Ahmet Atik — Computer Vision & Edge AI</title>
+<meta name="description" content="Can Ahmet Atik — gerçek zamanlı nesne tespiti, hedef takibi ve gömülü yapay zeka üzerine çalışan Mekatronik Mühendisliği öğrencisi.">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:title" content="Can Ahmet Atik — Computer Vision & Edge AI">
+<meta property="og:description" content="Gerçek zamanlı tespit, hibrit hedef takibi ve Hailo-8 üzerinde gömülü yapay zeka.">
 <meta property="og:url" content="https://canahmet1407.github.io/">
-<link rel="icon" href="favicon-48.png" type="image/png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='26' font-weight='700' fill='%23fff' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080c16; --panel: rgba(17,22,34,.8); --panel-solid: #111622;
-    --line: rgba(176,192,225,.12); --line-strong: rgba(176,192,225,.26);
-    --ink: #eef1f6; --ink-2: #a9b1c2; --ink-3: #6c7488;
-    --accent: #ff3b47; --accent-fill: #e3141f; --accent-soft: rgba(255,59,71,.11);
-    --ok: #34d399; --grid: rgba(176,192,225,.04);
-    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --display: "Chakra Petch", "Inter", system-ui, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-    color-scheme: dark;
-  }
-  :root[data-theme="light"] {
-    --bg: #f2f3f6; --panel: rgba(255,255,255,.85); --panel-solid: #fff;
-    --line: rgba(15,20,40,.12); --line-strong: rgba(15,20,40,.26);
-    --ink: #0c0f18; --ink-2: #434a5c; --ink-3: #737b8e;
-    --accent: #d0101b; --accent-fill: #d0101b; --accent-soft: rgba(208,16,27,.08);
-    --ok: #0f9f5f; --grid: rgba(15,20,40,.05);
-    color-scheme: light;
+    --bg: #0a0a0a; --fg: #fafafa; --mute: #8a8a8a; --dim: #4a4a4a; --line: #1f1f1f; --line-2: #2c2c2c;
+    --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+    --pad: clamp(20px, 4vw, 48px);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans);
-    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 40px 40px;
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  ::selection { background: var(--fg); color: var(--bg); }
+  a { color: inherit; text-decoration: none; }
+  .mono { font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--mute); }
+
+  header.bar { position: fixed; inset: 0 0 auto; z-index: 20; display: flex; align-items: center; gap: 24px;
+    padding: 18px var(--pad); mix-blend-mode: difference; color: #fff; }
+  .bar .name { font-weight: 600; letter-spacing: -.01em; }
+  .bar nav { display: flex; gap: 28px; margin-left: auto; font-size: 14px; }
+  .bar nav a { opacity: .7; transition: opacity .2s; } .bar nav a:hover { opacity: 1; }
+  .bar .clock { font: 500 12px var(--mono); opacity: .7; min-width: 70px; text-align: right; }
+
+  .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px var(--pad) 40px; border-bottom: 1px solid var(--line); }
+  .hero h1 { font-weight: 600; font-size: clamp(56px, 13.2vw, 220px); line-height: .86; letter-spacing: -.055em; margin: 0 0 clamp(36px, 6vw, 72px); }
+  .hero h1 span { display: block; }
+  .hero h1 .out { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
+  .hero-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: end; }
+  .hero-row p { font-size: clamp(19px, 2vw, 26px); line-height: 1.35; letter-spacing: -.015em; margin: 0; max-width: 24em; color: var(--mute); }
+  .hero-row p b { color: var(--fg); font-weight: 500; }
+  .meta { margin: 0; border-top: 1px solid var(--line-2); }
+  .meta div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line-2); font-size: 14px; }
+  .meta dt { color: var(--mute); } .meta dd { margin: 0; text-align: right; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--fg); margin-right: 8px; vertical-align: 1px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,.5); } 50% { box-shadow: 0 0 0 6px rgba(255,255,255,0); } }
+
+  .marquee { overflow: hidden; border-bottom: 1px solid var(--line); padding: 18px 0; white-space: nowrap; }
+  .marquee .track { display: inline-flex; animation: slide 40s linear infinite; font-size: clamp(20px, 2.4vw, 30px); font-weight: 500; letter-spacing: -.02em; }
+  .marquee .track span { display: inline-flex; align-items: center; gap: 40px; padding-right: 40px; }
+  .marquee .track span::after { content: "✕"; font-size: .45em; color: var(--dim); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  section { padding: clamp(80px, 12vw, 160px) var(--pad); border-bottom: 1px solid var(--line); }
+  h2 { font-size: clamp(36px, 5.4vw, 76px); font-weight: 600; letter-spacing: -.045em; line-height: .95; margin: 0; }
+  .sec-head { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; margin-bottom: clamp(40px, 6vw, 80px); align-items: end; }
+  .sec-head p { margin: 0; color: var(--mute); font-size: 18px; max-width: 30em; justify-self: end; }
+
+  .work { border-top: 1px solid var(--line-2); position: relative; isolation: isolate; }
+  .item { display: grid; grid-template-columns: 70px 1.3fr 1.6fr 120px; gap: 32px; align-items: start; padding: 36px 0; border-bottom: 1px solid var(--line-2); position: relative; transition: padding .35s cubic-bezier(.2,.7,.2,1), color .25s; }
+  .item::before { content: ""; position: absolute; inset: 0 calc(var(--pad) * -1); background: var(--fg); transform: scaleY(0); transform-origin: bottom; transition: transform .35s cubic-bezier(.2,.7,.2,1); z-index: -1; }
+  @media (hover: hover) {
+    .item:hover { color: var(--bg); padding-left: 16px; }
+    .item:hover::before { transform: scaleY(1); }
+    .item:hover .mono, .item:hover p, .item:hover .who { color: #555; }
+    .item:hover .tags span { border-color: #ccc; color: #333; }
+    .item:hover .go .arr { transform: translate(3px,-3px); }
   }
-  a { color: inherit; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .item .no { padding-top: 6px; }
+  .item h3 { font-size: clamp(24px, 2.6vw, 34px); font-weight: 600; letter-spacing: -.03em; line-height: 1.05; margin: 0 0 10px; }
+  .item .who { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--mute); }
+  .item p { margin: 0 0 16px; color: var(--mute); font-size: 15.5px; transition: color .25s; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font: 400 12px var(--mono); padding: 3px 9px; border: 1px solid var(--line-2); border-radius: 99px; color: var(--mute); }
+  .item .go { justify-self: end; font: 500 13px var(--mono); padding-top: 8px; }
+  .item .go .arr { transition: transform .3s; display: inline-block; }
+  .item .go.none { color: var(--dim); }
 
-  /* Nav */
-  nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--line); }
-  nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
-  .brand { font: 700 17px var(--display); text-decoration: none; letter-spacing: .02em; }
-  .brand span { color: var(--accent); }
-  .nav-links { display: flex; gap: 20px; margin-left: auto; font-size: 14px; }
-  .nav-links a { text-decoration: none; color: var(--ink-2); }
-  .nav-links a:hover { color: var(--ink); }
-  .theme { background: none; border: 1px solid var(--line-strong); color: var(--ink-2); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 15px; }
+  .about { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; }
+  .about .big { font-size: clamp(24px, 3vw, 40px); line-height: 1.2; letter-spacing: -.03em; font-weight: 500; margin: 0 0 56px; }
+  .about .big em { font-style: normal; color: var(--mute); }
+  .exp { border-top: 1px solid var(--line-2); }
+  .exp div { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line-2); align-items: baseline; }
+  .exp b { font-weight: 500; font-size: 17px; }
+  .exp span { color: var(--mute); font-size: 15px; }
+  .stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 72px; }
+  .stack h4 { margin: 0 0 14px; font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--mute); }
+  .stack ul { list-style: none; margin: 0; padding: 0; font-size: 16px; line-height: 2; }
 
-  /* Hero */
-  .hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center; padding: 88px 0 64px; }
-  .kicker { font: 600 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
-  h1 { font: 700 clamp(40px, 6vw, 64px)/1.02 var(--display); margin: 0 0 20px; letter-spacing: -.01em; }
-  .lead { font-size: 18px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; }
-  .lead b { color: var(--ink); font-weight: 600; }
-  .btns { display: flex; flex-wrap: wrap; gap: 12px; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--line-strong); }
-  .btn.primary { background: var(--accent-fill); border-color: var(--accent-fill); color: #fff; }
-  .btn:hover { transform: translateY(-1px); }
-  .btn svg { width: 18px; height: 18px; }
+  .contact { padding-bottom: 48px; }
+  .contact .lead { font-size: 18px; color: var(--mute); margin: 0 0 28px; max-width: 30em; }
+  .contact .mail { display: inline-block; font-size: clamp(30px, 7.4vw, 120px); font-weight: 600; letter-spacing: -.055em; line-height: 1.05; position: relative; overflow-wrap: anywhere; }
+  .contact .mail::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.04em; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .contact .mail:hover::after { transform: scaleX(1); }
+  .links { display: flex; gap: 32px; margin-top: 56px; flex-wrap: wrap; }
+  .links a { font-size: 15px; border-bottom: 1px solid var(--line-2); padding-bottom: 4px; }
+  .links a:hover { border-color: var(--fg); }
+  footer { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 28px var(--pad); }
 
-  /* HUD */
-  .hud { position: relative; aspect-ratio: 4/3; border: 1px solid var(--line-strong); border-radius: 16px; overflow: hidden;
-    background: radial-gradient(120% 90% at 50% 0%, rgba(80,110,170,.22), transparent 60%), var(--panel-solid); }
-  .hud svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .hud .label { position: absolute; font: 600 11px var(--mono); color: var(--ink-3); letter-spacing: .06em; }
-  .hud .tl { top: 12px; left: 14px; } .hud .tr { top: 12px; right: 14px; color: var(--ok); }
-  .hud .bl { bottom: 12px; left: 14px; } .hud .br { bottom: 12px; right: 14px; }
-  #target { animation: fly 9s ease-in-out infinite; }
-  @keyframes fly {
-    0%,100% { transform: translate(250px,120px); }
-    25% { transform: translate(330px,95px); }
-    50% { transform: translate(300px,170px); }
-    75% { transform: translate(190px,140px); }
-  }
-  .blink { animation: blink 1.2s steps(2) infinite; }
-  @keyframes blink { 50% { opacity: .25; } }
-  @media (prefers-reduced-motion: reduce) { #target, .blink { animation: none; } #target { transform: translate(250px,120px); } }
-
-  /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 14px; background: var(--panel); margin-bottom: 96px; }
-  .stat { padding: 22px 24px; border-left: 1px solid var(--line); }
-  .stat:first-child { border-left: 0; }
-  .stat b { display: block; font: 700 28px var(--display); }
-  .stat span { font-size: 13px; color: var(--ink-3); }
-
-  /* Sections */
-  section { margin-bottom: 104px; scroll-margin-top: 80px; }
-  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 28px; }
-  .sec-head .no { font: 600 13px var(--mono); color: var(--accent); }
-  h2 { font: 700 30px var(--display); margin: 0; }
-  .sec-sub { color: var(--ink-2); margin: -12px 0 28px; max-width: 42em; }
-
-  /* Pipeline */
-  .pipe { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
-  .pipe div { padding: 18px 20px; background: var(--panel); border-left: 1px solid var(--line); position: relative; }
-  .pipe div:first-child { border-left: 0; }
-  .pipe small { font: 600 11px var(--mono); color: var(--accent); letter-spacing: .1em; }
-  .pipe b { display: block; font: 600 16px var(--display); margin: 4px 0 2px; }
-  .pipe span { font-size: 13px; color: var(--ink-2); }
-
-  /* Projects */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-  .card { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 26px; display: flex; flex-direction: column; }
-  .card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .tag { font: 600 11px var(--mono); letter-spacing: .08em; color: var(--ink-3); }
-  .tag.me { color: var(--accent); } .tag.team { color: var(--ok); }
-  .card h3 { font: 600 21px var(--display); margin: 0 0 10px; }
-  .card p { color: var(--ink-2); margin: 0 0 16px; font-size: 15px; }
-  .card ul { margin: 0 0 18px; padding-left: 18px; color: var(--ink-2); font-size: 14.5px; }
-  .card li { margin-bottom: 4px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
-  .chip { font: 500 12px var(--mono); padding: 4px 9px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink-2); }
-  .card .repo { font: 600 13px var(--mono); color: var(--accent); text-decoration: none; margin-top: 16px; overflow-wrap: anywhere; }
-  .card { min-width: 0; }
-  .card .repo:hover { text-decoration: underline; }
-
-  /* Team */
-  .team { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: start; }
-  .team p { color: var(--ink-2); margin: 0 0 16px; }
-  .results { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 24px; }
-  .res { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; background: var(--panel); }
-  .res b { font: 700 18px var(--display); display: block; } .res span { font-size: 12px; color: var(--ink-3); }
-  .res.hi { border-color: var(--accent); }
-  .fleet { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .fleet figure { margin: 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--panel-solid); }
-  .fleet img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
-  .fleet figcaption { font: 600 12px var(--mono); padding: 8px 10px; color: var(--ink-2); }
-
-  /* Skills */
-  .skills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .skills h4 { font: 600 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
-  .skills .chips { margin: 0; }
-
-  /* Contact */
-  .contact { border: 1px solid var(--line-strong); border-radius: 18px; background: var(--panel); padding: 48px; text-align: center; }
-  .contact h2 { margin-bottom: 10px; }
-  .contact p { color: var(--ink-2); margin: 0 auto 26px; max-width: 34em; }
-  .contact .btns { justify-content: center; }
-  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--ink-3); font-size: 13px; }
-  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .rv { opacity: 0; transform: translateY(24px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .rv.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; } .marquee .track, .dot { animation: none; } }
 
   @media (max-width: 860px) {
-    .hero, .team { grid-template-columns: 1fr; }
-    .hero { padding-top: 56px; gap: 36px; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .stat:nth-child(3) { border-left: 0; } .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
-    .grid, .skills { grid-template-columns: 1fr; }
-    .pipe { grid-template-columns: 1fr 1fr; }
-    .pipe div:nth-child(3) { border-left: 0; } .pipe div:nth-child(n+3) { border-top: 1px solid var(--line); }
-    .fleet { grid-template-columns: repeat(2, 1fr); }
-    .nav-links { display: none; } .theme { margin-left: auto; }
-    .contact { padding: 32px 22px; }
+    .bar nav { display: none; } .bar .clock { margin-left: auto; }
+    .hero-row, .sec-head, .about { grid-template-columns: 1fr; gap: 28px; }
+    .sec-head p { justify-self: start; }
+    .item { grid-template-columns: 1fr; gap: 10px; padding: 28px 0; }
+    .item .no { padding: 0; } .item .go { justify-self: start; }
+    .exp div { grid-template-columns: 1fr; gap: 4px; }
+    .stack { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="#">Can Ahmet Atik<span>.</span></a>
-    <div class="nav-links">
-      <a href="#projeler">Projeler</a><a href="#takim">Takım</a><a href="#yetenekler">Yetenekler</a><a href="#iletisim">İletişim</a>
-    </div>
-    <button class="theme" id="theme" aria-label="Tema değiştir">◐</button>
-  </div>
-</nav>
+<header class="bar">
+  <a class="name" href="#">Can Ahmet Atik</a>
+  <nav><a href="#calismalar">Çalışmalar</a><a href="#hakkimda">Hakkımda</a><a href="#iletisim">İletişim</a></nav>
+  <span class="clock" id="clock">İST --:--</span>
+</header>
 
-<main class="wrap">
-  <header class="hero">
-    <div>
-      <p class="kicker">Görüntü İşleme · Gömülü Yapay Zeka · Otonom İHA</p>
-      <h1>Can Ahmet Atik</h1>
-      <p class="lead">Kocaeli Üniversitesi Mekatronik Mühendisliği öğrencisiyim. <b>HÜRTÜRK İHA Takımı</b>'nın kaptanı ve görüntü işleme lideri olarak otonom sabit kanatlı İHA'larda gerçek zamanlı tespit ve hedef takibi geliştiriyorum.</p>
-      <div class="btns">
-        <a class="btn primary" href="mailto:hmcnatik@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>İletişime geç</a>
-        <a class="btn" href="https://github.com/canahmet1407" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
-      </div>
-    </div>
-
-    <div class="hud" aria-hidden="true">
-      <svg viewBox="0 0 480 360">
-        <g stroke="currentColor" style="color:var(--line-strong)" fill="none">
-          <line x1="240" y1="0" x2="240" y2="360" stroke-dasharray="2 6"/>
-          <line x1="0" y1="180" x2="480" y2="180" stroke-dasharray="2 6"/>
-        </g>
-        <rect x="150" y="105" width="180" height="150" fill="none" stroke="#e8b23a" stroke-width="1.5" stroke-dasharray="6 4" opacity=".8"/>
-        <circle cx="240" cy="180" r="5" fill="none" stroke="var(--ink-3)"/>
-        <g id="target">
-
-          <g transform="translate(-22,-10)">
-            <path d="M0 10 L44 10 M22 0 L22 20 M16 10 L22 4 L28 10 M18 18 L26 18" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-          </g>
-          <rect x="-34" y="-22" width="68" height="44" fill="none" stroke="var(--accent)" stroke-width="2"/>
-          <text x="-34" y="-28" fill="var(--accent)" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">iha 0.91</text>
-        </g>
-      </svg>
-      <span class="label tl">YOLO + LK + CSRT + KALMAN</span>
-      <span class="label tr"><span class="blink">●</span> KİLİT</span>
-      <span class="label bl">640×480 · HAILO-8</span>
-      <span class="label br">4.0 s</span>
-    </div>
-  </header>
-
-  <div class="stats">
-    <div class="stat"><b>33K+</b><span>görselden oluşan İHA veri seti</span></div>
-    <div class="stat"><b>Hailo-8</b><span>üzerinde gerçek zamanlı çıkarım</span></div>
-    <div class="stat"><b>6</b><span>karşılaştırılan takip yaklaşımı</span></div>
-    <div class="stat"><b>2024</b><span>TEKNOFEST Savaşan İHA finali</span></div>
-  </div>
-
-  <section id="projeler">
-    <div class="sec-head"><span class="no">01</span><h2>Projeler</h2></div>
-    <p class="sec-sub">Algılamadan araç kontrolüne uçtan uca görüntü işleme hattı.</p>
-
-    <div class="pipe">
-      <div><small>01 · VERİ</small><b>Veri seti</b><span>Roboflow, etiketleme, Active Learning</span></div>
-      <div><small>02 · MODEL</small><b>Tespit</b><span>YOLOv8 / YOLO26 eğitimi</span></div>
-      <div><small>03 · GÖMÜLÜ</small><b>Çıkarım</b><span>Raspberry Pi 5 + Hailo-8</span></div>
-      <div><small>04 · TAKİP</small><b>Kilitlenme</b><span>Hibrit takip + MAVLink</span></div>
-    </div>
-
-    <div class="grid">
-      <article class="card">
-        <div class="top"><span class="tag me">BİREYSEL</span><span class="tag">PYTHON · OPENCV</span></div>
-        <h3>Hibrit Hedef Takip Sistemi</h3>
-        <p>YOLO tespitini klasik takip algoritmalarıyla birleştirerek modelin hedefi kaçırdığı karelerde de kilidin kopmamasını sağlayan sistem.</p>
-        <ul>
-          <li>Lucas-Kanade optik akış + CSRT yedek takipçi</li>
-          <li>Kalman filtresi ile yörünge tahmini ve kısa kayıplarda devam</li>
-          <li>6 farklı yaklaşım (ByteTrack, BoT-SORT/ReID, CLAHE…) karşılaştırıldı</li>
-          <li>Yarışma kurallarına uygun 4 sn kilitlenme sayacı</li>
-        </ul>
-        <div class="chips"><span class="chip">YOLOv8</span><span class="chip">Lucas-Kanade</span><span class="chip">CSRT</span><span class="chip">Kalman</span></div>
-        <a class="repo" href="https://github.com/canahmet1407/UAV_TRACKER" target="_blank" rel="noopener">→ github.com/canahmet1407/UAV_TRACKER</a>
-      </article>
-
-      <article class="card">
-        <div class="top"><span class="tag me">BİREYSEL</span><span class="tag">HAILO DFC</span></div>
-        <h3>YOLO → Hailo-8 Dönüşümü</h3>
-        <p>Kendi eğittiğimiz modelleri Raspberry Pi 5 + Hailo-8 üzerinde gerçek zamanlı çalıştırmak için .pt → ONNX → .hef derleme hattı.</p>
-        <ul>
-          <li>INT8 kuantizasyon için kalibrasyon seti</li>
-          <li>Hailo NMS son işleme entegrasyonu</li>
-          <li>Ön işleme ve çıktı ayrıştırma kaynaklı doğruluk/performans sorunlarının çözümü</li>
-        </ul>
-        <div class="chips"><span class="chip">Hailo-8</span><span class="chip">ONNX</span><span class="chip">Raspberry Pi 5</span></div>
-        <a class="repo" href="https://github.com/canahmet1407/Convert_.pt_to_.hef" target="_blank" rel="noopener">→ github.com/canahmet1407/Convert_.pt_to_.hef</a>
-      </article>
-
-      <article class="card">
-        <div class="top"><span class="tag team">EKİP + BİREYSEL</span><span class="tag">ROBOFLOW</span></div>
-        <h3>Veri Seti & Model Eğitimi</h3>
-        <p>Ekip olarak 33 bini aşkın görselden oluşan İHA veri setleri hazırladık; bu verilerle YOLOv8 ve YOLO26 modelleri eğittim.</p>
-        <ul>
-          <li>Veri artırma ve etiketleme süreçleri</li>
-          <li>Bulutta canlı model + Active Learning: modelin zorlandığı kareler otomatik olarak veri setine geri dönüyor</li>
-        </ul>
-        <div class="chips"><span class="chip">YOLO26</span><span class="chip">Roboflow</span><span class="chip">Active Learning</span></div>
-      </article>
-
-      <article class="card">
-        <div class="top"><span class="tag team">EKİP</span><span class="tag">ROS 2 · ARDUPILOT</span></div>
-        <h3>Simülasyon & Saha Testleri</h3>
-        <p>Sistemlerimizi önce simülasyonda doğrulayıp sonra ekiple birlikte gerçek uçuşlarda test ediyoruz.</p>
-        <ul>
-          <li>ROS 2 Jazzy, Gazebo ve ArduPilot SITL</li>
-          <li>4G modül ile araçtan yer istasyonuna canlı görüntü aktarımı</li>
-          <li>Takımın kendi yer kontrol arayüzüyle uçuş ve log analizi</li>
-        </ul>
-        <div class="chips"><span class="chip">ROS 2</span><span class="chip">Gazebo</span><span class="chip">SITL</span><span class="chip">MAVLink</span></div>
-      </article>
+<main>
+  <section class="hero">
+    <h1><span class="rv">Can Ahmet</span><span class="rv out">Atik</span></h1>
+    <div class="hero-row">
+      <p class="rv">Gerçek zamanlı görüntü işleme üzerine çalışıyorum: <b>nesne tespiti, hedef takibi</b> ve modelleri <b>gömülü donanımda</b> hızlı çalıştırmak.</p>
+      <dl class="meta rv">
+        <div><dt>Odak</dt><dd>Computer Vision · Edge AI</dd></div>
+        <div><dt>Eğitim</dt><dd>Mekatronik Müh. · Kocaeli Üni.</dd></div>
+        <div><dt>Konum</dt><dd>Kocaeli, Türkiye</dd></div>
+        <div><dt>Durum</dt><dd><span class="dot"></span>Staj / yarı zamanlı işe açık</dd></div>
+      </dl>
     </div>
   </section>
 
-  <section id="takim">
-    <div class="sec-head"><span class="no">02</span><h2>HÜRTÜRK İHA Takımı</h2></div>
-    <div class="team">
-      <div>
-        <p>2017'den beri İHA geliştiren, Kocaeli Üniversitesi Mekatronik Mühendisliği Kulübü bünyesindeki takımımızda kaptanlık yapıyor ve görüntü işleme birimini yönetiyorum.</p>
-        <p>Birimde görev dağılımını yürütüyor, yeni üyelere Python ve OpenCV'den YOLO eğitimi ve takip algoritmalarına uzanan bir eğitim programı veriyorum.</p>
-        <div class="results">
-          <div class="res"><b>5.</b><span>2018</span></div>
-          <div class="res"><b>7.</b><span>2019</span></div>
-          <div class="res hi"><b>Finalist</b><span>2024</span></div>
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>YOLOv8</span><span>YOLO26</span><span>OpenCV</span><span>Hailo-8</span><span>Raspberry Pi 5</span><span>Kalman</span><span>Optical Flow</span><span>ROS 2</span><span>Gazebo</span><span>ArduPilot</span><span>MAVLink</span>
+      <span>YOLOv8</span><span>YOLO26</span><span>OpenCV</span><span>Hailo-8</span><span>Raspberry Pi 5</span><span>Kalman</span><span>Optical Flow</span><span>ROS 2</span><span>Gazebo</span><span>ArduPilot</span><span>MAVLink</span>
+    </div>
+  </div>
+
+  <section id="calismalar">
+    <div class="sec-head">
+      <h2 class="rv">Seçili<br>çalışmalar</h2>
+      <p class="rv">Veriden modele, modelden gömülü donanıma ve oradan hedef takibine kadar uçtan uca bir görüntü işleme hattı.</p>
+    </div>
+
+    <div class="work">
+      <a class="item rv" href="https://github.com/canahmet1407/UAV_TRACKER" target="_blank" rel="noopener">
+        <span class="no mono">01</span>
+        <div><h3>Hibrit Hedef Takibi</h3><span class="who">Bireysel</span></div>
+        <div>
+          <p>YOLO tespitini Lucas-Kanade optik akış, CSRT ve Kalman filtresiyle birleştiren takip sistemi; model hedefi kaçırdığında bile kilit kopmuyor. ByteTrack ve BoT-SORT dahil 6 farklı yaklaşım karşılaştırıldı.</p>
+          <div class="tags"><span>YOLOv8</span><span>Lucas-Kanade</span><span>CSRT</span><span>Kalman</span></div>
         </div>
-        <a class="btn" href="https://hurturkuavteam.github.io" target="_blank" rel="noopener">Takım sayfası →</a>
+        <span class="go">GitHub <span class="arr">↗</span></span>
+      </a>
+
+      <a class="item rv" href="https://github.com/canahmet1407/Convert_.pt_to_.hef" target="_blank" rel="noopener">
+        <span class="no mono">02</span>
+        <div><h3>YOLO → Hailo-8</h3><span class="who">Bireysel</span></div>
+        <div>
+          <p>Eğitilen modelleri Raspberry Pi 5 + Hailo-8 üzerinde gerçek zamanlı çalıştırmak için .pt → ONNX → .hef derleme hattı: INT8 kalibrasyon, NMS entegrasyonu ve ön işleme kaynaklı doğruluk sorunlarının çözümü.</p>
+          <div class="tags"><span>Hailo DFC</span><span>ONNX</span><span>INT8</span><span>Raspberry Pi 5</span></div>
+        </div>
+        <span class="go">GitHub <span class="arr">↗</span></span>
+      </a>
+
+      <div class="item rv">
+        <span class="no mono">03</span>
+        <div><h3>Veri Seti & Active Learning</h3><span class="who">Ekip + Bireysel</span></div>
+        <div>
+          <p>Ekipçe hazırladığımız 33 bini aşkın görselden oluşan veri setiyle YOLOv8 ve YOLO26 modelleri eğittim. Bulutta çalışan modele Active Learning kurarak modelin zorlandığı karelerin otomatik olarak veri setine dönmesini sağladım.</p>
+          <div class="tags"><span>Roboflow</span><span>YOLO26</span><span>Active Learning</span></div>
+        </div>
+        <span class="go none">—</span>
       </div>
-      <div class="fleet">
-        <figure><img src="filo-yamali.jpg" alt="HT-YAMALI" loading="lazy"><figcaption>HT-YAMALI</figcaption></figure>
-        <figure><img src="filo-alaz.jpg" alt="HT-ALAZ" loading="lazy"><figcaption>HT-ALAZ</figcaption></figure>
-        <figure><img src="filo-istikbal.jpg" alt="HT-İSTİKBAL" loading="lazy"><figcaption>HT-İSTİKBAL</figcaption></figure>
-        <figure><img src="filo-koreke.jpg" alt="HT-KÖREKE" loading="lazy"><figcaption>HT-KÖREKE</figcaption></figure>
+
+      <div class="item rv">
+        <span class="no mono">04</span>
+        <div><h3>Simülasyon & Saha</h3><span class="who">Ekip</span></div>
+        <div>
+          <p>Sistemleri ROS 2, Gazebo ve ArduPilot SITL'de doğrulayıp gerçek uçuşlarda test ediyoruz. 4G modül üzerinden araçtan yer istasyonuna canlı görüntü aktarımı.</p>
+          <div class="tags"><span>ROS 2 Jazzy</span><span>Gazebo</span><span>SITL</span><span>4G</span></div>
+        </div>
+        <span class="go none">—</span>
       </div>
     </div>
   </section>
 
-  <section id="yetenekler">
-    <div class="sec-head"><span class="no">03</span><h2>Yetenekler</h2></div>
-    <div class="skills">
-      <div><h4>Görüntü İşleme</h4><div class="chips"><span class="chip">OpenCV</span><span class="chip">YOLO</span><span class="chip">Nesne takibi</span><span class="chip">Kalman</span><span class="chip">Roboflow</span></div></div>
-      <div><h4>Gömülü</h4><div class="chips"><span class="chip">Raspberry Pi 5</span><span class="chip">Hailo-8</span><span class="chip">Pixhawk</span><span class="chip">ESP32</span></div></div>
-      <div><h4>Robotik</h4><div class="chips"><span class="chip">ROS 2</span><span class="chip">Gazebo</span><span class="chip">ArduPilot</span><span class="chip">MAVLink</span></div></div>
-      <div><h4>Yazılım</h4><div class="chips"><span class="chip">Python</span><span class="chip">NumPy</span><span class="chip">GStreamer</span><span class="chip">Linux</span><span class="chip">Git</span></div></div>
+  <section id="hakkimda">
+    <div class="about">
+      <h2 class="rv">Hakkımda</h2>
+      <div>
+        <p class="big rv">Bir modelin laptopta çalışması ile sahada, gerçek zamanlı ve <em>kısıtlı donanımda</em> çalışması arasındaki farkla uğraşmayı seviyorum.</p>
+        <div class="exp rv">
+          <div><b>Takım Kaptanı & Görüntü İşleme Lideri</b><span>HÜRTÜRK İHA Takımı · TEKNOFEST Savaşan İHA</span><span class="mono">Günümüz</span></div>
+          <div><b>Mekatronik Mühendisliği</b><span>Kocaeli Üniversitesi</span><span class="mono">Lisans</span></div>
+        </div>
+        <div class="stack rv">
+          <div><h4>Görüntü</h4><ul><li>OpenCV</li><li>YOLO</li><li>Nesne takibi</li><li>Roboflow</li></ul></div>
+          <div><h4>Gömülü</h4><ul><li>Raspberry Pi 5</li><li>Hailo-8</li><li>Pixhawk</li><li>ESP32</li></ul></div>
+          <div><h4>Robotik</h4><ul><li>ROS 2</li><li>Gazebo</li><li>ArduPilot</li><li>MAVLink</li></ul></div>
+          <div><h4>Yazılım</h4><ul><li>Python</li><li>NumPy</li><li>GStreamer</li><li>Linux · Git</li></ul></div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section id="iletisim">
-    <div class="contact">
-      <h2>Birlikte çalışalım</h2>
-      <p>Görüntü işleme, nesne takibi ve gömülü yapay zeka alanında yarı zamanlı, uzaktan veya staj fırsatlarına açığım.</p>
-      <div class="btns">
-        <a class="btn primary" href="mailto:hmcnatik@gmail.com">hmcnatik@gmail.com</a>
-        <a class="btn" href="https://github.com/canahmet1407" target="_blank" rel="noopener">GitHub</a>
-      </div>
+  <section id="iletisim" class="contact">
+    <p class="mono rv" style="margin:0 0 20px">İLETİŞİM</p>
+    <p class="lead rv">Görüntü işleme, nesne takibi veya gömülü yapay zeka üzerine bir şey mi geliştiriyorsunuz? Yazın.</p>
+    <a class="mail rv" href="mailto:hmcnatik@gmail.com">hmcnatik@gmail.com</a>
+    <div class="links rv">
+      <a href="https://github.com/canahmet1407" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="mailto:hmcnatik@gmail.com">E-posta ↗</a>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap"><span>© 2026 Can Ahmet Atik</span><span>Kocaeli Üniversitesi · Mekatronik Mühendisliği</span></div>
-</footer>
+<footer class="mono"><span>© 2026 Can Ahmet Atik</span><span>Kocaeli, TR</span></footer>
 
 <script>
   (function () {
-    var root = document.documentElement, key = "tema";
-    try { var s = localStorage.getItem(key); if (s) root.dataset.theme = s; } catch (e) {}
-    document.getElementById("theme").addEventListener("click", function () {
-      var t = root.dataset.theme === "dark" ? "light" : "dark";
-      root.dataset.theme = t;
-      try { localStorage.setItem(key, t); } catch (e) {}
-    });
+    var c = document.getElementById("clock");
+    function tick() {
+      try { c.textContent = "İST " + new Intl.DateTimeFormat("tr-TR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" }).format(new Date()); } catch (e) {}
+    }
+    tick(); setInterval(tick, 15000);
+    var els = document.querySelectorAll(".rv");
+    if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
+    var io = new IntersectionObserver(function (ents) {
+      ents.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { threshold: .12 });
+    var h = 0;
+    els.forEach(function (e) { if (e.closest(".hero")) e.style.transitionDelay = (h++ * 90) + "ms"; io.observe(e); });
   })();
 </script>
 </body>
